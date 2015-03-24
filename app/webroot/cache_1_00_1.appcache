@@ -1,0 +1,60 @@
+CACHE MANIFEST
+# 2015-02-10:v1  add tthis to html tag :  manifest="example.appcache"
+
+# Explicitly cached entries // js files and css and fonts
+#css/style.css
+http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css
+https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css
+
+# offline.html will be displayed if the user is offline
+FALLBACK:
+#/ /offline.html
+
+# All other resources (e.g. sites) require the user to be online. 
+NETWORK:
+*
+
+# Additional resources to cache
+CACHE:
+
+#External libs
+
+https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.min.js
+https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-animate.min.js
+https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-touch.min.js
+https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-route.min.js
+
+https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js
+
+#marker cluster
+https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css
+https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css
+https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js
+
+
+css/leaflet.label.css
+css/af.ui.css
+
+#views
+views/add_case.html
+views/home.html
+
+#controllers
+js/motor/controllers/addCaseController.js
+js/motor/controllers/rootController.js
+
+#directives
+js/motor/directives/core.js
+
+#motors
+js/motor/filters.js
+js/motor/main.js
+js/motor/services.js
+
+#libs
+js/libs.min.js
+js/bottom_libs.js
+
+#images/logo1.png
+#images/logo2.png
+#images/logo3.png

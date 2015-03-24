@@ -1,0 +1,317 @@
+@import "include-media";
+
+@mixin font-face($style-name, $file, $family, $category:"") {
+  $filepath: "../fonts/" + $family + "/" + $file;
+  @font-face {
+    font-family: "#{$style-name}";
+    src: url($filepath + ".eot");
+    src: url($filepath + ".eot?#iefix") format('embedded-opentype'),
+         url($filepath + ".woff") format('woff'),
+         url($filepath + ".ttf") format('truetype'),
+         url($filepath + ".svg#" + $style-name + "") format('svg'),
+         url($filepath + ".otf") format('opentype');
+  }
+  %#{$style-name} {
+    font: {
+      @if $category != "" {
+        family: "#{$style-name}", #{$category};
+      } @else {
+        family: "#{$style-name}" ;
+        weight:normal;
+      }
+    }
+  }
+}
+
+@function calculateRem($size) {
+  $remSize: $size / 16px;
+  @return $remSize * 1rem;
+}
+
+@mixin font-size($size) {
+  font-size: $size;
+  font-size: calculateRem($size);
+}
+
+
+@mixin hide-text {
+  font: 0/0 a;
+  text-shadow: none;
+  color: transparent;
+}
+
+@mixin opacity ( $value: 0.5 ) {
+  opacity: $value;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=" + $value * 100 + ")";
+  filter: alpha(opacity= $value * 100 );
+  zoom: 1;
+}
+/*-webkit-box-shadow:inset $horiz $vert $blur $spread $color;
+    -moz-box-shadow:inset $horiz $vert $blur $spread $color;*/
+@mixin box-shadowFnc( $horiz : .5em , $vert : .5em , $blur : 0px , $spread : 0px , $color : #000000, $inset: false ){
+  @if $inset {
+
+    box-shadow:inset $horiz $vert $blur $spread $color;
+  } @else {
+
+    box-shadow: $horiz $vert $blur $spread $color;
+  }
+}
+/*-webkit-box-shadow: $horiz $vert $blur $spread $color;
+    -moz-box-shadow: $horiz $vert $blur $spread $color;*/
+
+/// Test if `$value` is a valid direction
+/// @param {*} $value - Value to test
+/// @return {Bool}
+@function is-direction($value) {
+  $is-keyword: index((to top, to top right, to right top, to right, to bottom right, to right bottom, to bottom, to bottom left, to left bottom, to left, to left top, to top left), $value);
+  $is-angle: type-of($value) == 'number' and index('deg' 'grad' 'turn' 'rad', unit($value));
+
+  @return $is-keyword or $is-angle;
+}
+
+/// Convert a direction to legacy syntax
+/// @param {Keyword | Angle} $value - Value to convert
+/// @require {function} is-direction
+/// @require {function} convert-angle
+/// @throw Cannot convert `#{$value}` to legacy syntax because it doesn't seem to be a direction.;
+@function legacy-direction($value) {
+  @if is-direction($value) == false {
+    @error "Cannot convert `#{$value}` to legacy syntax because it doesn't seem to be a direction.";
+  }
+
+  $conversion-map: (
+          to top          : bottom,
+          to top right    : bottom left,
+          to right top    : left bottom,
+          to right        : left,
+          to bottom right : top left,
+          to right bottom : left top,
+          to bottom       : top,
+          to bottom left  : top right,
+          to left bottom  : right top,
+          to left         : right,
+          to left top     : right bottom,
+          to top left     : bottom right
+  );
+
+  @if map-has-key($conversion-map, $value) {
+    @return map-get($conversion-map, $value);
+  }
+
+  @return 90deg - $value;
+}
+
+@mixin linear-gradient($direction, $color-stops...) {
+  // Direction has been omitted and happens to be a color-stop
+  @if is-direction($direction) == false {
+    $color-stops: $direction, $color-stops;
+    $direction: 180deg;
+  }
+
+  background: nth(nth($color-stops, 1), 1);
+  background: -webkit-linear-gradient(legacy-direction($direction), $color-stops);
+  background: linear-gradient($direction, $color-stops);
+}
+
+
+/*
+.selector-1 {
+  @include linear-gradient(#31B7D7, #EDAC7D);
+}
+
+.selector-2 {
+  @include linear-gradient(to right, #E47D7D 0%, #C195D3 50%, #4FB4E8 100%);
+}
+
+.selector-3 {
+  @include linear-gradient(42deg, #B58234 0%, #D2B545 50%, #D7C04D 50.01%, #FFFFFF 100%);
+}
+
+*/
+
+/*  box-shadow:inset $horiz $vert $blur $spread $color;
+a.something should extend this mixin
+*/
+/*inset 0px 1px rgba(255, 255, 255, 0.4);*/
+@mixin buttonChrome ($colorHue, $className, $borderRadiusList: 5px, $padding: 20px 0, $fontWeight: 600, $fontSize: .875rem, $width: 154px) {
+  .#{$className} {
+    $var1: rgba(255, 255, 255, 0.4);
+    border-radius: $borderRadiusList;
+    @include box-shadowFnc(0px, 1px, 0px, 0px, $var1, true);
+    display: block;
+    float: left;
+    padding: $padding;
+    font-size: $fontSize;
+    font-weight: $fontWeight;
+    text-align: center;
+    text-transform: uppercase;
+
+    text-decoration: none;
+    @include linear-gradient(hsla($colorHue, 62, 81, 1),hsla($colorHue, 59, 63, 1));
+    border: 1px solid hsla($colorHue, 48, 49, 1);
+    color: hsla($colorHue, 69, 26, 1);
+    text-shadow: 0px 1px hsla($colorHue - 1, 59, 81, 1);
+    cursor: pointer;
+
+    @if($width != 0)
+    {
+      width: $width;
+    }
+
+  }
+
+  .#{$className}:active {
+    @include box-shadowFnc( 0px , 0px, 10px ,  0px ,rgba(0, 0, 0, 0.2), true );
+    transition: 0.25s;
+  }
+
+  .#{$className}:hover {
+    @include linear-gradient(hsla($colorHue, 62, 86, 1),hsla($colorHue - 1, 59, 68, 1));
+  }
+}
+
+/**
+* Vertical Scroll bar using Sly js
+*/
+@mixin verticalScrollbar($scrlbrClsName, $hndleClsName, $mseClsName, $scrlbrBkgrnd: #eee , $hndlBkgrnd: #ffa605 ,$enableGradient:false, $colorStops...){
+  .#{$scrlbrClsName} {
+    position: absolute;
+    top: 10px;
+    right: 5px;
+    bottom: 10px;
+    width: 2px;
+    @if($enableGradient == false)
+    {
+      background:$scrlbrBkgrnd ;
+    }
+    @else {
+      @include linear-gradient($colorStops);
+    }
+    @include media("<tablet"){
+      right: 0px;
+    }
+  }
+  .#{$scrlbrClsName} .#{$hndleClsName} {
+    width: 100%;
+    height: 100px;
+    background: $hndlBkgrnd;
+    cursor: pointer;
+  }
+  .#{$scrlbrClsName} .#{$hndleClsName} .#{$mseClsName}{
+    position: absolute;
+    top: 0;
+    left: -5px;
+    //width: 22px; /*******************************************/
+    height: 100%;
+  }
+}
+
+
+/**
+HSLa helper functions
+*/
+
+@function _getHue($val, $add)
+{
+  @debug $val;
+  @debug $add;
+   $newVal: $val + $add;
+
+  @debug $newVal;
+  @if( $newVal > 360)
+  {
+    $newVal: $newVal - 360;
+  }
+
+  @debug $newVal;
+  @return $newVal;
+}
+
+@function _getSaturation($val, $add)
+{
+  $newval: $val + $add;
+  @if( $newval > 100)
+  {
+    $newval: $newval - 100;
+  }
+  @return newVal
+}
+
+
+@function _getLight($val, $add)
+{
+  $newval: $val + $add;
+  @if( $newval > 100)
+  {
+    $newval: $newval - 100;
+  }
+  @return $newval;
+}
+
+
+
+/*
+ tooltip generator
+ default data attribute is data-tooltip
+ 50
+ "konel-building"
+ rgb(252, 250, 247)  0
+ 100px
+*/
+@mixin rightHandTooltip($tooltipClassName, $zindex, $fontFamily, $bkgrndColor, $leftSpacer){
+  .#{$tooltipClassName}{
+    position: relative;
+@debug $bkgrndColor;
+    &:before{
+      line-height: 22px;
+    //line-height: 1.4rem;
+
+    z-index: $zindex;
+    position: absolute;
+    font-family: $fontFamily;
+       $hue: _getHue($bkgrndColor, 36);
+      @debug #{$hue};
+    color: hsla($hue , 45, 98, 1) ;
+    white-space: nowrap;
+    letter-spacing: .07rem;
+    @include media("<tablet"){
+      left: $leftSpacer ;
+      content: attr(data-tooltip);
+      text-transform: capitalize;
+      letter-spacing: .07rem;
+      letter-spacing: 11.2px;
+    }
+  }
+
+    &:hover:before{
+    padding: .08rem .3rem;
+
+    border-radius: 5px;
+    @include media(">=tablet"){
+      content: attr(data-tooltip);
+      left: ($leftSpacer * .30); //30
+      border-style: solid;
+      border-width: .062rem;
+      border-width: .992px;
+      @debug "right before the color hsla stuffs" + $bkgrndColor;
+      background-color: hsl($bkgrndColor, 8, 13);
+      border-color: hsl($bkgrndColor, 24, 29);
+    }
+  }
+
+    &:hover:after{
+    @include media(">=tablet"){
+      position: absolute;
+      content: "\25C0";
+      left: $leftSpacer * .20; //20
+      z-index: $zindex;
+      color: hsla($bkgrndColor, 0, 13, 1);
+      vertical-align: middle;
+      @debug $bkgrndColor;
+      text-shadow: 0px 0px 1px hsla($bkgrndColor, 0, 29, 1), 0px 1px 1px hsla($bkgrndColor, 0, 29, 1), 0px 0px 1px hsla($bkgrndColor, 0, 29, 1), 1px 5px 6px hsla($bkgrndColor, 0, 29, 1);
+    }
+  }
+}
+}
+

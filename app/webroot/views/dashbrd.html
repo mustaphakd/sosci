@@ -1,0 +1,225 @@
+<div id="dshbrdView" style="min-height: 100%; width: 100%; background-color: brown;">
+    <div class="view" id="addCaseMainView">
+        <header>
+            <span style="display: block">#Registered users</span>
+            <span style="display: block">Users online</span>
+        </header>
+        <div class="pages">
+            <div class="panel" selected="true" title="Form" id="dshMaster" >
+                <div class="grid">
+                    <div class="col2-3">map mamp map</div>
+
+                    <div class="col1-3 hideSmallerThanTablet">
+                        <div class="formGroupHead">Formulaire</div>
+                        <form>
+                            <div class="grid">
+                                <div class="col1-3">name</div>
+
+                                <div class="col2-3"><input type="text" placeholder="name" id="txtName"></div>
+                            </div>
+
+                            <div class="grid">
+                                <div class="col1-3">crime type</div>
+
+                                <div class="col2-3">
+                                    <select >
+                                        <option value="1">Kidnaping</option>
+                                        <option value="2">Murder</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="grid">
+                                <div class="col1-3">picture of the victim</div>
+
+                                <div class="col2-3"><input type="text" placeholder="image path" ></div>
+
+                                <div class="col2-3"><input type="button" placeholder="select source" ></div>
+                            </div>
+
+                            <div class="grid">
+                                <div class="col1-3">age group</div>
+
+                                <div class="col2-3">
+                                    <select >
+                                        <option value="1">Enfant</option>
+                                        <option value="2">Teen(12-18 ans)</option>
+                                        <option value="4">Jeune Adult(19 - 25 ans)</option>
+                                        <option value="8">Adult(26 - 45 ans)</option>
+                                        <option value="16">Middle aged(46 - 69 ans)</option>
+                                        <option value="32">Old(70+)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="grid">
+                                <div class="col1-3">Gender</div>
+
+                                <div class="col2-3 bottomSpacer">
+                                    <input  type="radio" name="radio_test" id="radio_1"  value="1"><label for="radio_1">Male</label>
+                                    <input  type="radio" name="radio_test" id="radio_2" value="2"><label for="radio_2">Female</label>
+                                </div>
+                            </div>
+
+                            <div class="grid">
+                                <div class="col1-3">Place d'occurence</div>
+
+                                <div class="col2-3">
+                                    <select>
+                                        <option value="1">Club</option>
+                                        <option value="2">Ecole</option>
+                                        <option value="4">Marche</option>
+                                        <option value="8">Rue</option>
+                                        <option value="16">Taxi</option>
+                                        <option value="32">other</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="grid">
+                                <div class="col1-3">detail</div>
+
+                                <div class="col2-3">
+                                    <textarea rows="6" placeholder="Enter detail"></textarea>
+                                </div>
+                            </div>
+
+                            <div class="grid">
+                                <div class="col1-3">Location</div>
+
+                                <div class="col2-3"><a class="button fa fa-location-arrow" ng-click="selectMap();">Select map</a></div>
+                            </div>
+
+                            <div class="grid">
+                                <div class="col1-3">Status</div>
+
+                                <div class="col2-3">
+                                    <select >
+                                        <option value="1">Open</option>
+                                        <option value="2">Pending</option>
+                                        <option value="4">Unresolved</option>
+                                        <option value="8">Unknown</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+
+                            <!--<div class="grid"> -->
+                                <div class=" btnGreen" style="width: 100%"><a class=" fa fa-floppy-o fa-5x">Save</a></div>
+                                <div class=" btnOrand" style="width: 100%"><a class=" fa fa-eraser fa-5x">Cancel</a></div>
+                            <!--</div>-->
+                        </form>
+                    </div>
+                </div>
+
+
+
+            </div>
+
+            <div class="panel" title="Map" id="dshDetail" style="height: 100%; width: 100%; background-color: #bbbbbb">
+                <div class="formGroupHead">Formulaire</div>
+                <form>
+                    <div class="grid">
+                        <div class="col1-3">name</div>
+
+                        <div class="col2-3"><input type="text" placeholder="name" ></div>
+                    </div>
+
+                    <div class="grid">
+                        <div class="col1-3">crime type</div>
+
+                        <div class="col2-3">
+                            <select >
+                                <option value="1">Kidnaping</option>
+                                <option value="2">Murder</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid">
+                        <div class="col1-3">picture of the victim</div>
+
+                        <div class="col2-3"><input type="text" placeholder="image path" ></div>
+
+                        <div class="col2-3"><input type="button" placeholder="select source" ></div>
+                    </div>
+
+                    <div class="grid">
+                        <div class="col1-3">age group</div>
+
+                        <div class="col2-3">
+                            <select >
+                                <option value="1">Enfant</option>
+                                <option value="2">Teen(12-18 ans)</option>
+                                <option value="4">Jeune Adult(19 - 25 ans)</option>
+                                <option value="8">Adult(26 - 45 ans)</option>
+                                <option value="16">Middle aged(46 - 69 ans)</option>
+                                <option value="32">Old(70+)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid">
+                        <div class="col1-3">Gender</div>
+
+                        <div class="col2-3 bottomSpacer">
+                            <input id="radio_11" type="radio" name="radio_test2" value="1"><label for="radio_11">Male</label>
+                            <input id="radio_22" type="radio" name="radio_test2" value="2"><label for="radio_22">Female</label>
+                        </div>
+                    </div>
+
+                    <div class="grid">
+                        <div class="col1-3">Place d'occurence</div>
+
+                        <div class="col2-3">
+                            <select id="slctPlace">
+                                <option value="1">Club</option>
+                                <option value="2">Ecole</option>
+                                <option value="4">Marche</option>
+                                <option value="8">Rue</option>
+                                <option value="16">Taxi</option>
+                                <option value="32">other</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="grid">
+                        <div class="col1-3">detail</div>
+
+                        <div class="col2-3">
+                            <textarea rows="6" placeholder="Enter detail"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="grid">
+                        <div class="col1-3">Location</div>
+
+                        <div class="col2-3"><a class="button fa fa-location-arrow" ng-click="selectMap();">Select map</a></div>
+                    </div>
+
+                    <div class="grid">
+                        <div class="col1-3">Status</div>
+
+                        <div class="col2-3">
+                            <select >
+                                <option value="1">Open</option>
+                                <option value="2">Pending</option>
+                                <option value="4">Unresolved</option>
+                                <option value="8">Unknown</option>
+                            </select>
+                        </div>
+                    </div>
+
+
+
+                    <div class="grid">
+                        <div class="col2 btnGreen"><a class=" fa fa-floppy-o fa-5x">Save</a></div>
+                        <div class="col2 btnOrand"><a class=" fa fa-eraser fa-5x">Cancel</a></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>

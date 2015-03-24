@@ -1,0 +1,1086 @@
+
+@import "mixins-components";
+
+$glbl-background: #222;
+
+
+$min-sidebar-sizeh: 50px;
+$mx-sidebar-size: 100px;
+
+$titleFont: "konel-bizon";
+$subTitleFont: "konel-building";
+$textFont: 'konel-abel';
+
+$textFont2: 'pahel';
+$textFont3: 'bmlask';
+$textFont4: 'mvsid';
+
+$menuWidth: 40px;
+
+body, html{
+  background: $glbl-background;
+  height: 100%; //100%  ******************************************************
+  overflow: hidden;  /************************************hidden*****************/
+}
+
+.sidebar-md{
+
+  @include media(">tablet", "<=desktop") {
+
+  }
+
+  }
+/********************Fonts Definitions**********************/
+//@include font-face('konel-building', 'Building', 'ersdal', '');
+@include font-face('konel-abel', 'Abel-Regular', 'ersdal', '');
+@include font-face('konel-bizon', 'Bizon', 'ersdal', '');
+@include font-face('konel-building', 'Building', 'ersdal', '');
+
+@include font-face($textFont2, 'bgrove', 'bryul', '');
+@include font-face($textFont3, 'museosans-web', 'bryul', '');
+
+/***************************Fonts*****************************/
+
+.galleryItemTitle{
+  font-family: $textFont3;
+  font-size: 1.005em;
+  color: white;
+}
+.regularText{
+  font-family: $textFont2;
+  font-size: 1.005em;
+  color: white;
+}
+.galleryItemText{
+  font-family: $textFont;
+  font-size: 1.005em;
+  color: white;
+}
+
+.titleText{
+  font-family: "konel-bizon";
+  //font-size: 1.5em;
+  //color: white;
+  color: rgb(241, 239, 244);
+  font-size: 4.5rem;
+  line-height: 1.2em;
+  padding: 50px 0;
+  text-align: center;
+  text-shadow: 0px 2px 2px #B8C043;
+}
+
+.dataVizTitleText{
+  font-family: $subTitleFont;
+  font-size: 1.005em;
+  color: orangered;
+}
+/********************Buttons Definitions**********************/
+@include buttonChrome (55, "btnSunshine");
+@include buttonChrome (173, "btnGreen", 3px, 8px 5px, 300, .575rem, $width: 0);
+@include buttonChrome (30, "btnOrand", 3px, 8px 5px, 300, .575rem, $width: 0);
+@include buttonChrome (249, "btnBlue", 8px, 8px 5px, 300, .575rem, $width: 0);
+
+/********************Scrollbarsz Definitions**********************/
+@include verticalScrollbar("scrollbar", "handle", "mousearea", #2eff35, #ffa605, true, #2eff35, #fff, #facd00);
+/*@include verticalScrollbar("scrollbar", "handle", "mousearea", #2eff35, #ffa605, false, nil);*/
+
+.frame {
+  /*margin: 0rem .8rem 0rem 0rem;*/
+  margin: .3rem;
+  height: 100%;  /***************100%;****************************/
+  background-color: #2F2F2F;
+  width: 99%;    /**********************/
+  @include media("<tablet"){
+   width: 98.5%;
+  }
+ // overflow: hidden; //*****************************added****/
+}
+.host {
+  position: relative;  /*****************relative*************************/
+  background-color: #202020;
+  height: 100%;  /*****************100.5%**************************/
+  width: 100%;
+  margin: .1rem;
+}
+.menu{
+  position: relative; /***************************************/
+
+  border-color:  #494949;
+  border-width: .1rem;
+
+
+  @include media(">=tablet") {
+    float: left;
+    height: 100%;
+    width: $menuWidth;
+    z-index: 6;
+
+    display: inline-block;
+
+    background-color: #2A2A2A;
+    border-right-style: solid;
+    //border-right-color: #494949 ;
+    //border-right-width: .1rem;
+
+  }
+  @include media("<tablet")
+  {
+    width: 100%;
+    //height: auto;
+    position: absolute;
+    z-index: 100;
+    //top: -2.5%;
+
+    background-color: #2A2A2A;
+    border-bottom-style: solid;
+   // border-bottom-color: #494949;
+    //border-bottom-width: .5rem;
+    border-color: rgba(144, 129, 129, 0.37);
+    background-color: #494949;
+    display: none;
+  }
+
+}
+.topMenu{
+  background-color: yellowgreen;
+
+  @include media(">=tablet")
+  {
+    /*position: absolute;
+    top: 1px;*/
+    width: $menuWidth - 1;
+  }
+}
+.host .menu .topMenu ul {
+  padding:.006836rem;
+  /* ($menuWidth / 2 ) - ($menuWidth / 4);*/
+}
+.host .menu .topMenu ul li {
+  list-style-type: none;
+  @include media(">=tablet")
+  {
+    margin: 0rem 0rem 1.123rem 0rem;
+    padding: 5px;
+  }
+  @include media("<tablet"){
+    padding: 8px;
+  }
+}
+.host .menu .topMenu ul li:hover {
+box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(255, 255, 254, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+}
+.host .menu .topMenu ul li, .host .menu .topMenu ul li a  {
+  color: #000000;
+  text-decoration: none;
+}
+.host .menu .topMenu ul li:active, .host .menu .topMenu ul li:hover, .host .menu .topMenu ul li:hover a  {
+  color: gold;
+}
+.host .menu .topMenu ul li.selected {
+  color: gold;
+}
+.host .menu .topMenu ul li {
+  list-style-type: none;
+  @include media(">=tablet")
+  {
+    margin: 0rem 0rem 1.123rem 0rem;
+    padding: 5px;
+  }
+  @include media("<tablet"){
+    padding: 8px;
+  }
+}
+
+
+
+.bottomMenu{
+  /*position: absolute;*/
+  //height: 100px;
+  //position: fixed;
+  //top: 10%;
+  /*bottom: 15%;*/
+  //width: 34px;
+
+  /*margin-bottom: 200%;*/
+  margin-top: 70%;
+
+  @include media("<tablet"){
+    display: none;
+  }
+}
+.bottomMenuMobile{
+  display: none;
+  @include media("<tablet"){
+    display: block;
+  }
+}
+.bottomMenuMobile ul{
+  margin: 0px;
+  padding: 0px;
+}
+.bottomMenuMobile span i{
+  padding-left: 5%;
+}
+.bottomMenuMobile ul li  {
+  color: #C8BDBD;
+  list-style-type: none;
+  @include media("<tablet"){
+    padding: 8px;
+    padding-left: 10%;
+  }
+}
+.bottomMenuMobile ul li:hover {
+  box-shadow: rgba(255, 255, 255, 0.1) 0 1px 0, rgba(255, 255, 254, 0.1) 0 1px 0, rgba(0, 0, 0, 0.8) 0 1px 7px 0px inset;
+  color: orangered;
+}
+.bottomMenuMobile .authItems .authIcon{
+  margin-left: -20%;
+}
+.bottomMenuMobile span.tooltip:hover:before {
+   padding: 0rem;
+
+}
+.bottomMenu .container .host {
+
+  transition: all 50s;
+}
+.host .mobileMenuBars{
+  display: none;
+  float: right;
+  margin-right: 5px;
+  padding: 5px;
+  border-color:  #494949;
+  border-style: solid;
+  z-index: 101;
+  cursor: pointer;
+
+
+  padding: 0px 05px 0px 05px;
+  //border-color: #544B4B;
+  border-width: .2rem;
+  border-style: solid;
+  border-radius: 5px;
+  background-color: #C8BDBD;
+  vertical-align: text-top;
+  font-size: 25px;
+  opacity: .5;
+  @include media("<tablet"){
+    display: inline-block;
+    position: absolute;
+    right: 1%;
+  }
+}
+.host .mobileMenuBars:hover{
+  opacity: .9;
+}
+div.bottomMenu .container{
+  position: relative;
+}
+
+/*.content {
+  position: relative;
+  float: left;
+  width: 97.1%;
+  height: 100%;
+
+}*/
+.content {
+  position: relative;  /***********************relative********************/
+  height: 100%;       /******************100%**************************/
+  //overflow: hidden;  /*************hidden******************************/
+  z-index: 1;
+
+
+  @include media(">=tablet")
+  {
+    padding-left: $menuWidth + 1; /********************added***************/
+  }
+}
+.container .host {
+  /*background-color: yellow;*/
+  height: 57px;
+  //overflow: hidden;
+  margin-right: -.5rem;
+}
+
+.authItems{
+
+  @include media(">=tablet"){
+    background-color: violet;
+    border-color: yellow;
+    border-style: solid;
+    border-width: .07rem;
+  }
+
+}
+.authItems a.tooltip .fa{
+  display: inline;
+}
+div.host > div.authItems {
+  position: absolute;
+  //width: 100%;
+  top: 0px;
+  border-bottom-left-radius: 10px;
+}
+div.host > div.authItems, div.bottomMenu .container  {
+  height: auto;
+  margin: 0rem;
+}
+
+i.selected{
+  color: darkorange;
+  align-content: center;
+  vertical-align: middle;
+  padding-left: 23%;
+}
+.authIcon{
+  display: none;
+  //opacity: 0;
+}
+.authClassOnForlargeScreen{
+  @include media(">=tablet"){
+    display: block!important;
+  }
+}
+
+.farLeftOffscreen{
+  left: -500px;
+}
+
+/****************Tooltip****************************/
+
+@include rightHandTooltip("tooltip", 50, "konel-building", 73, 100px);
+
+/*****************************************************/
+.catchyPhrase{
+  @include media(">=tablet"){
+    text-shadow: 0px 2px 2px #B8C043, 3px 2px 5px chocolate;
+    //position: absolute; /****************************************/
+    width: auto;
+    top: 40%;
+    white-space: nowrap;
+    left: 20%;
+  }
+}
+
+/*****************Articles***********************/
+
+.article{
+
+  background: linear-gradient(0deg, rgba(244, 255, 245, 0.16) 0%, rgba(146, 129, 129, 0) 5%, rgba(146, 129, 129, 0) 95%, rgba(249, 250, 249, 0.3) 100%), linear-gradient(90deg, rgba(249, 253, 250, 0.15) 0%, rgba(146, 129, 129, 0) 5%, rgba(146, 129, 129, 0) 95%, rgba(250, 255, 252, 0.21) 100%);
+  /* background-size: 50% 50%; */
+  //height: 5320px; /**********************97%******************/
+  height: 97%;
+  width: 99.4%;
+  //position: absolute; /**********************************************/
+  /* background-repeat: no-repeat; */
+  /* background-size: 50% 50%; */
+  z-index: 1;
+  /* top: -2px; */
+  /* border-style: solid; */
+  border-radius: 21px 21px 21px 74px;
+  border: 3px solid #494949;
+
+
+  @include media(">=tablet"){
+    height: 98%; /*************************************************************/
+  }
+
+  @include  media(">tablet"){
+    //top: -800px;
+    //animation-name: articleEntry;
+    animation-delay: 2.8s;
+    animation-duration: 3s;
+    animation-timing-function: cubic-bezier(0, 1, 0, 2.5);
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+  }
+}
+
+@keyframes articleEntry {
+  0% { transform: translateY(0%);}
+  100% {transform: translateY(800px);}
+}
+
+
+/*************************Loader****************************************************/
+
+#loader-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1000;
+  background-color: #23241e;
+}
+#loader {
+  display: block;
+  position: relative;
+  left: 50%;
+  top: 50%;
+  width: 150px;
+  height: 150px;
+  margin: -75px 0 0 -75px;
+
+  border: 3px solid #3498db;
+  z-index: 1500;
+}
+#loader:before {
+  content: "";
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  right: 5px;
+  bottom: 5px;
+  border: 3px solid #e74c3c;
+}
+#loader:after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  left: 15px;
+  right: 15px;
+  bottom: 15px;
+  border: 3px solid #f9c922;
+}
+
+/* change border to transparent and set only border-top to a solid color */
+#loader {
+  border: 3px solid transparent;
+  border-top-color: #ffa605;
+}
+#loader:before {
+  border: 3px solid transparent;
+  border-top-color: #ffffff;
+}
+#loader:after {
+  border: 3px solid transparent;
+  border-top-color: #1edf13;
+}
+#loader {
+  border-radius: 50%;
+  animation: spin 2s linear infinite;
+}
+#loader:before {
+  border-radius: 50%;
+  animation: spin 3s linear infinite;
+}
+#loader:after {
+  border-radius: 50%;
+  animation: spin 1.5s linear infinite;
+}
+@keyframes spin {
+  0%   {
+    transform: rotate(0deg);  /* Firefox 16+, IE 10+, Opera */
+  }
+  50%{
+    border-radius: 00%;
+    transform: rotate(180deg) scale(1.5,1.5);
+  }
+  100% {
+    border-radius: 75%;
+   // transform: ;,scale(1, 1)
+    transform: rotate(360deg);  /* Firefox 16+, IE 10+, Opera */
+  }
+}
+
+
+.hide{
+  display: none!important;
+}
+
+#loader-wrapper .notifier{
+  border-style: solid;
+  border-width: 2px;
+  border-color: #ff0000;
+  background-color: yellow;
+  border-radius: 5px;
+  padding: 10px;
+  line-height: 35px;
+  position: relative;
+  /* display: inline; */
+  left: 30%;
+  top: 30%;
+  max-width: 300px;
+  width: auto;
+  text-align: center;
+  font-size: 18px;
+  text-shadow: 0px 1px 1px rgba(250, 150, 150, 1);
+}
+
+#loader-wrapper .notifier .notifierContent{
+  vertical-align: text-bottom;
+}
+
+.makeTransparent{
+  background-color: rgba(35, 36, 30, 0.47)!important;
+}
+/*****************************Homw View****************************************/
+.leaflet-control-scrollerContainer{
+  width: 100%;
+  height: 180px;
+  margin-left: 1px;
+
+  position: relative;
+  background: radial-gradient(rgba(29, 31, 32, 0.06), rgba(47, 48, 49, 0.06));
+  border-left: 1px solid linear-gradient(to right, #505050, #383838);;
+}
+.leaflet-control-scrollerContainer:hover{
+  width: 100%;
+  height: 180px;
+  margin-left: 1px;
+
+  position: relative;
+  background: radial-gradient(#1D1F20, #2F3031);
+}
+.leaflet-bottom {
+  width: 100%;
+}
+
+.leaflet-control {
+  margin-left: 1px;
+}
+.leaflet-bottom .leaflet-control {
+  margin-bottom: 10px;
+  margin-left: 1px;
+}
+
+.detailBand{
+  width: 100%;
+  background-color: deeppink;
+}
+.leaflet-control-scrollerEdge{
+  background: linear-gradient(to bottom, #505050, #383838);
+  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  box-shadow: inset 0 1px 0 #6e6e6e,0 2px 2px rgba(0,0,0,0.4);
+  height: 17px;
+  border-left: 1px solid black;
+  opacity: .16;
+  /*
+  top: 0 !important;
+  -webkit-flex-shrink: 0;
+  -ms-flex-negative: 0;
+  flex-shrink: 0;
+  cursor: row-resize;
+  position: relative;
+  z-index: 300;*/
+}
+.leaflet-control-scrollerContainer:hover .leaflet-control-scrollerEdge{
+  opacity: .95;
+}
+/*
+.result {
+  position: relative;
+  width: 100%;
+  height: 50%;
+  z-index: 200;
+  background: radial-gradient(#1D1F20, #2F3031);
+}*/
+.hframe ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  //height: 100%;
+  width: 6040px;
+  font-size: 50px;
+  transform: translateZ(0px) translateX(0px);
+  transition-duration: 1s;
+  transition-timing-function: ease-in-out;
+
+  @include media(">=tablet"){
+    height: 150px;
+  }
+}
+
+.hframe ul li {
+  float: left;
+  width: 227px;
+  height: 100%;
+  min-height: 150px;
+  margin: 0 8px 0 0;
+  padding: 0;
+  background: #333;
+  color: #ddd;
+  text-align: center;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 15px;
+  overflow: hidden;
+}
+.hframe ul li:hover{
+  border-style: solid;
+  border-width: 1px;
+}
+.hframe ul li div{
+  padding: 0px;
+  //margin: 0px;
+  text-align: left;
+}
+
+/*
+.scroller-nav-container {
+  position: absolute;
+  top: 0px;
+  //background-color: #844d2e;
+  height: 95%;
+  width: 100%;
+  z-index: 15;
+}*/
+.hframe .left {
+//float: left;
+color: #383838;
+  position: absolute;
+  left: 0px;
+  top:0px;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 21;
+ //background-color: #EE5757;
+  //background: linear-gradient(45deg, rgba(248,80,50,1) 0%, rgba(240,47,23,0.47) 53%, rgba(245,238,237,0) 100%);
+  @include media(">=tablet")
+  {
+    //width: 5%;
+    height: 100%;
+    margin-top: 20px;
+    font-size: 30px;
+    min-width: 50px;
+    text-align: center;
+    text-shadow: -2px 2px 1px  rgba(32, 32, 32, 1);
+  }
+  @include media("<tablet"){
+    color: rgba(18, 18, 28, 1);
+  }
+}
+
+.hframe .right {
+  //float: right;
+  color: #383838;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 21;
+  //background-color: #EE5757;
+  @include media(">=tablet")
+  {
+    //width: 5%;
+    height: 100%;
+    margin-top: 20px;
+    font-size: 30px;
+    min-width: 50px;
+    text-align: center;
+    text-shadow: 2px 2px 1px  rgba(32, 32, 32, 1);
+  }
+  @include media("<tablet"){
+    color: rgba(18, 18, 28, 1);
+  }
+}
+
+.leaflet-control-scrollerContainer:hover .leaflet-control-scroller .scroller-nav-container .left,
+.leaflet-control-scrollerContainer:hover .leaflet-control-scroller .scroller-nav-container .right,
+.hframe:hover .right,
+.hframe:hover .left,
+{
+  opacity: .5;
+}
+.hframe .right:hover {
+  opacity: 1!important;
+}
+.hframe .left:hover {
+  opacity: 1!important;
+}
+.hframe{
+  width: 100%;
+  z-index: 20;
+  position: absolute;
+}
+
+.leaflet-zoom-animated
+{
+  cursor: move;
+}
+
+ #idaddMap .leaflet-map-pane .leaflet-tile-pane .leaflet-layer .leaflet-zoom-animated{
+   cursor: pointer;
+}
+
+/***************************************/
+
+.victim_status{
+  font-size: 14px;
+  font-weight: bolder;
+  text-align: left;
+  margin-left: 10px;
+ // margin-top: -20%;
+}
+.vctmstatus_open{
+  @extend .victim_status;
+color: #ffffbf;
+}
+.vctmstatus_pending {
+  @extend .victim_status;
+color: #a6d96a;
+}
+.vctmstatus_unresolved{
+  @extend .victim_status;
+color: #fdae61;
+}
+.vctmstatus_closed {
+  @extend .victim_status;
+color: #1a9641;
+}
+.vctmstatus_unknown {
+  @extend .victim_status;
+color: #d7191c;
+}
+/*
+$titleFont: "konel-bizon";
+$subTitleFont: "konel-building";
+$textFont: 'konel-abel';
+
+$textFont2: 'pahel';
+$textFont3: 'bmlask';
+$textFont4: 'mvsid';
+*/
+.vctmSyn{
+  font-family: $subTitleFont;
+  padding-left: 3px;
+  margin-top: 3px;
+  height: 85px;
+}
+.vctmSyn textarea{
+  border: none; //1px solid #888;
+  outline: none;
+  resize: none;
+  overflow: auto;
+  background-color: rgba(51, 51, 51, 1);
+  color: #ffffff;
+}
+
+.vctmAge{
+  font-size: 12px;
+  text-align: left;
+  margin-left: 25px;
+}
+.vctmName{
+  font-family: $textFont;
+text-align: left;
+  font-weight: bold;
+  margin-left: 8px;
+}
+
+.gndr{
+  float: right;
+  margin: 5px;
+}
+span.mlGndr:before{
+  @extend .gndr;
+  color: #1745FF;
+  font-family: FontAwesome;
+  content: "\f222";
+}
+span.fmlGndr:before{
+  @extend .gndr;
+  color: deeppink;
+  font-family: FontAwesome;
+  content: "\f221";
+}
+.date-time{
+  text-align: left;
+  font-style: italic;
+  font-size: 10px;
+
+}
+
+/*****************View Selector************/
+
+.leaflet-control-viewContainer{
+  /*  background-color: #EE5757;
+  min-width: 100px;
+   min-height: 75px;*/
+
+  position: relative;
+  display: inline-block;
+  vertical-align: middle;
+}
+.leaflet-control-viewContainer > .leaflet-control-iconBtn{
+  position: relative;
+  float: left;
+}
+.leaflet-control-dropdown{
+
+}
+.leaflet-control-dropdown:focus {
+  outline: 0;
+}
+.leaflet-control-iconBtn{
+  display: inline-block;
+  padding: 6px 20px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  user-select: none;
+  background-image: none;
+  border: 1px solid transparent;
+  border-radius: 4px;
+
+
+  color: #333;
+  background-color: #fff;
+  border-color: #ccc;
+
+  text-shadow: 0 -1px 0 rgba(0,0,0,.2);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.15),0 1px 1px rgba(0,0,0,.075);
+
+
+  text-shadow: 0 1px 0 #fff;
+  background-image: linear-gradient(to bottom,#fff 0,#e0e0e0 100%);
+  background-repeat: repeat-x;
+  border-color: #ccc;
+
+}
+.leaflet-control-iconBtn.active:focus, .leaflet-control-iconBtn:active:focus, .leaflet-control-iconBtn:focus {
+  outline: dotted thin;
+  outline: -webkit-focus-ring-color auto 5px;
+  outline-offset: -2px;
+}
+.leaflet-control-iconBtn:focus, .leaflet-control-iconBtn:hover {
+  color: #333;
+  text-decoration: none;
+}
+.leaflet-control-iconBtn.active, .leaflet-control-iconBtn:active {
+  background-image: none;
+}
+.leaflet-control-viewContainer > .leaflet-control-iconBtn:last-child:not(:first-child) {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.leaflet-control-viewContainer > .leaflet-control-iconBtn+.leaflet-control-dropdown {
+  padding-right: 8px;
+   padding-left: 8px;
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-left: -5px;
+}
+.leaflet-control-viewContainer.open .leaflet-control-dropdown {
+  box-shadow: inset 0 3px 5px rgba(0,0,0,.125);
+}
+/*
+.btn-default:focus, .btn-default:hover {
+  background-color: #e0e0e0;
+  background-position: 0 -15px;
+}*/
+.leaflet-control-viewExpand{
+
+}
+.leaflet-control-viewRetreat{
+
+}
+.leaflet-control-radioBtn{
+
+}
+.leaflet-control-radioBtnContainer{
+
+}
+
+.leaflet-control-viewContainerFirstTier{
+  background-color: yellow;
+  width: 100%;
+  height: 25px;
+}
+
+.leaflet-control-viewContainerSecondTier{
+  background-color: greenyellow;
+  width: 100%;
+  height: 50px;
+}
+.caret {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  margin-left: 2px;
+  vertical-align: middle;
+  border-top: 4px solid;
+  border-right: 4px solid transparent;
+  border-left: 4px solid transparent;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0,0,0,0);
+  border: 0;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: -75px;
+  z-index: 1000;
+  display: none;
+  float: left;
+  min-width: 160px;
+  padding: 5px 0;
+  margin: 2px 0 0;
+  font-size: 14px;
+  text-align: left;
+  list-style: none;
+  background-color: #fff;
+  background-clip: padding-box;
+  border: 1px solid #ccc;
+  border: 1px solid rgba(0,0,0,.15);
+  border-radius: 4px;
+  box-shadow: 0 6px 12px rgba(0,0,0,.175);
+}
+.open>.dropdown-menu {
+  display: block;
+}
+input[type='radio']:focus+label{color:#C30}
+
+/********************************AppFramework related**********************/
+
+.pages{
+
+}
+
+.panel{
+  //height: auto;
+  -ms-overflow-style: none;
+}
+
+.panel::-webkit-scrollbar {
+  display: none;
+}
+.panel::-moz-scrollbar {
+  width: 0px;
+  display: none;
+}
+
+.firefox .view{
+  @include media("<=303px"){
+    width: 105%;
+  }
+
+  @include media(">303px", "<=506px"){
+    width: 103%;
+  }
+
+  @include media(">506px", "<=tablet"){
+    width: 102%;
+  }
+
+  @include media(">tablet", "<=972px"){
+    width: 102.5%;
+  }
+
+  @include media(">972px"){
+    width: 102%;
+  }
+
+}
+
+.firefox .view .panel{
+  padding-right: 5%;
+}
+.bottomSpacer{
+  margin-bottom: 15px;
+
+  @include media("<tablet"){
+    margin-bottom: 80px;
+  }
+}
+
+.hideSmallerThanTablet{
+  @include media("<tablet"){
+    display: none;
+  }
+}
+
+.navBack{
+  border-color: #000000;
+  border-style: solid;
+  padding: 2px;
+  border-width: 2px;
+  float: right;
+  margin-right: 5px;
+  margin-top: 2px;
+  border-radius: 8px;
+
+}
+
+.view header{
+  text-align: center!important;
+  padding-top: 3px!important;
+  text-transform: capitalize!important;
+  font-weight: bold!important;
+  font-size: 25px!important;
+}
+/**********************************************Form Validation************************/
+.ng-invalid, .makeInvalid{
+  border-color: #ff0000!important;
+  border-width: 5px!important;
+
+}
+
+.makeInvalid{
+  color: #ff0000!important;
+  font-weight: bolder;
+}
+
+/***********************Message Box****************************************/
+
+.messageBox{
+  margin-top: 15%;
+  margin-left: 15%;
+  width: 50%;
+  border-style: solid;
+  border-radius: 8px;
+  padding-top: 5%;
+  text-align: center;
+  border-color: rgb(116, 219, 207);
+  border-width: 1px;
+  padding-left: 5px;
+  padding-right: 5px;
+  padding-bottom: 5px;
+
+  @include media("<tablet"){
+    width: 80%;
+  }
+}
+
+.messageContent{
+  margin-bottom: 5%;
+  font-family: konel-abel;
+  font-size: 25px;
+}
+
+.messageContent p{
+  font-family: konel-abel;
+  font-size: 25px;
+}
+
+.messageBox .btnGreen{
+  text-transform: capitalize;
+}
+
+/*
+div[data-picker-wrapper] table{
+  color: #000000!important;
+}
+
+
+table{
+  color: #000000!important;
+}
+*/
