@@ -1,228 +1,155 @@
-<?php
-/**
- * @link          http://cakephp.org CakePHP(tm) Project
- * @package       app.View.Pages
- * @since         CakePHP(tm) v 0.10.0.1076
- */
 
-if (!Configure::read('debug')):
-	throw new NotFoundException();
-endif;
 
-App::uses('Debugger', 'Utility');
-?>
-<h2><?php echo __d('cake_dev', 'Release Notes for CakePHP %s.', Configure::version()); ?></h2>
-<p>
-	<?php echo $this->Html->link(__d('cake_dev', 'Read the changelog'), 'http://cakephp.org/changelogs/' . Configure::version()); ?>
-</p>
-<?php
-if (Configure::read('debug') > 0):
-	Debugger::checkSecurityKeys();
-endif;
-?>
-<?php if (file_exists(WWW_ROOT . 'css' . DS . 'cake.generic.css')): ?>
-	<p id="url-rewriting-warning" style="background-color:#e32; color:#fff;">
-		<?php echo __d('cake_dev', 'URL rewriting is not properly configured on your server.'); ?>
-		1) <a target="_blank" href="http://book.cakephp.org/2.0/en/installation/url-rewriting.html" style="color:#fff;">Help me configure it</a>
-		2) <a target="_blank" href="http://book.cakephp.org/2.0/en/development/configuration.html#cakephp-core-configuration" style="color:#fff;">I don't / can't use URL rewriting</a>
-	</p>
-<?php endif; ?>
-<p>
-<?php
-if (version_compare(PHP_VERSION, '5.2.8', '>=')):
-	echo '<span class="notice success">';
-		echo __d('cake_dev', 'Your version of PHP is 5.2.8 or higher.');
-	echo '</span>';
-else:
-	echo '<span class="notice">';
-		echo __d('cake_dev', 'Your version of PHP is too low. You need PHP 5.2.8 or higher to use CakePHP.');
-	echo '</span>';
-endif;
-?>
-</p>
-<p>
-	<?php
-	if (is_writable(TMP)):
-		echo '<span class="notice success">';
-			echo __d('cake_dev', 'Your tmp directory is writable.');
-		echo '</span>';
-	else:
-		echo '<span class="notice">';
-			echo __d('cake_dev', 'Your tmp directory is NOT writable.');
-		echo '</span>';
-	endif;
-	?>
-</p>
-<p>
-	<?php
-	$settings = Cache::settings();
-	if (!empty($settings)):
-		echo '<span class="notice success">';
-			echo __d('cake_dev', 'The %s is being used for core caching. To change the config edit %s', '<em>' . $settings['engine'] . 'Engine</em>', 'APP/Config/core.php');
-		echo '</span>';
-	else:
-		echo '<span class="notice">';
-			echo __d('cake_dev', 'Your cache is NOT working. Please check the settings in %s', 'APP/Config/core.php');
-		echo '</span>';
-	endif;
-	?>
-</p>
-<p>
-	<?php
-	$filePresent = null;
-	if (file_exists(APP . 'Config' . DS . 'database.php')):
-		echo '<span class="notice success">';
-			echo __d('cake_dev', 'Your database configuration file is present.');
-			$filePresent = true;
-		echo '</span>';
-	else:
-		echo '<span class="notice">';
-			echo __d('cake_dev', 'Your database configuration file is NOT present.');
-			echo '<br/>';
-			echo __d('cake_dev', 'Rename %s to %s', 'APP/Config/database.php.default', 'APP/Config/database.php');
-		echo '</span>';
-	endif;
-	?>
-</p>
-<?php
-if (isset($filePresent)):
-	App::uses('ConnectionManager', 'Model');
-	try {
-		$connected = ConnectionManager::getDataSource('default');
-	} catch (Exception $connectionError) {
-		$connected = false;
-		$errorMsg = $connectionError->getMessage();
-		if (method_exists($connectionError, 'getAttributes')):
-			$attributes = $connectionError->getAttributes();
-			if (isset($errorMsg['message'])):
-				$errorMsg .= '<br />' . $attributes['message'];
-			endif;
-		endif;
-	}
-	?>
-	<p>
-		<?php
-			if ($connected && $connected->isConnected()):
-				echo '<span class="notice success">';
-					echo __d('cake_dev', 'CakePHP is able to connect to the database.');
-				echo '</span>';
-			else:
-				echo '<span class="notice">';
-					echo __d('cake_dev', 'CakePHP is NOT able to connect to the database.');
-					echo '<br /><br />';
-					echo $errorMsg;
-				echo '</span>';
-			endif;
-		?>
-	</p>
-<?php
-endif;
+    <?php $this->start('appHeader'); ?>
+   <base href="/demos/sosci/">
 
-App::uses('Validation', 'Utility');
-if (!Validation::alphaNumeric('cakephp')):
-	echo '<p><span class="notice">';
-		echo __d('cake_dev', 'PCRE has not been compiled with Unicode support.');
-		echo '<br/>';
-		echo __d('cake_dev', 'Recompile PCRE with Unicode support by adding <code>--enable-unicode-properties</code> when configuring');
-	echo '</span></p>';
-endif;
-?>
+    <link href="/demos/sosci/favicon.ico" type="image/x-icon" rel="shortcut icon" />
 
-<p>
-	<?php
-	if (CakePlugin::loaded('DebugKit')):
-		echo '<span class="notice success">';
-			echo __d('cake_dev', 'DebugKit plugin is present');
-		echo '</span>';
-	else:
-		echo '<span class="notice">';
-			echo __d('cake_dev', 'DebugKit is not installed. It will help you inspect and debug different aspects of your application.');
-			echo '<br/>';
-			echo __d('cake_dev', 'You can install it from %s', $this->Html->link('GitHub', 'https://github.com/cakephp/debug_kit'));
-		echo '</span>';
-	endif;
-	?>
-</p>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Save our Nation</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, user-scalable=0">
 
-<h3><?php echo __d('cake_dev', 'Editing this Page'); ?></h3>
-<p>
-<?php
-echo __d('cake_dev', 'To change the content of this page, edit: %s.<br />
-To change its layout, edit: %s.<br />
-You can also add some CSS styles for your pages at: %s.',
-	'APP/View/Pages/home.ctp', 'APP/View/Layouts/default.ctp', 'APP/webroot/css');
-?>
-</p>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css" />
+    <link href="css/leaflet.label.css" rel="stylesheet" type="text/css" media="all" />
 
-<h3><?php echo __d('cake_dev', 'Getting Started'); ?></h3>
-<p>
-	<?php
-	echo $this->Html->link(
-		sprintf('<strong>%s</strong> %s', __d('cake_dev', 'New'), __d('cake_dev', 'CakePHP 2.0 Docs')),
-		'http://book.cakephp.org/2.0/en/',
-		array('target' => '_blank', 'escape' => false)
-	);
-	?>
-</p>
-<p>
-	<?php
-	echo $this->Html->link(
-		__d('cake_dev', 'The 15 min Blog Tutorial'),
-		'http://book.cakephp.org/2.0/en/tutorials-and-examples/blog/blog.html',
-		array('target' => '_blank', 'escape' => false)
-	);
-	?>
-</p>
+    <link href="css/af.ui.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="css/index.min.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="css/main.css" rel="stylesheet" type="text/css" media="all" />
+    <!--
+        <script type="text/javascript" async="true" src="js/libs/jquery-2.1.3.min.js"></script>manifest="cache_1_00_1.appcache"
+        <script type="text/javascript" async="true" src="js/libs/verge.js"></script>
+        <script type="text/javascript" async="true" src="js/libs.min.js"></script>-->
 
-<h3><?php echo __d('cake_dev', 'Official Plugins'); ?></h3>
-<p>
-<ul>
-	<li>
-		<?php echo $this->Html->link('DebugKit', 'https://github.com/cakephp/debug_kit') ?>:
-		<?php echo __d('cake_dev', 'provides a debugging toolbar and enhanced debugging tools for CakePHP applications.'); ?>
-	</li>
-	<li>
-		<?php echo $this->Html->link('Localized', 'https://github.com/cakephp/localized') ?>:
-		<?php echo __d('cake_dev', 'contains various localized validation classes and translations for specific countries'); ?>
-	</li>
-</ul>
-</p>
+    <?php $this->end(); ?>
 
-<h3><?php echo __d('cake_dev', 'More about CakePHP'); ?></h3>
-<p>
-<?php echo __d('cake_dev', 'CakePHP is a rapid development framework for PHP which uses commonly known design patterns like Active Record, Association Data Mapping, Front Controller and MVC.'); ?>
-</p>
-<p>
-<?php echo __d('cake_dev', 'Our primary goal is to provide a structured framework that enables PHP users at all levels to rapidly develop robust web applications, without any loss to flexibility.'); ?>
-</p>
+<!--<body ng-controller="mainAppController">-->
 
-<ul>
-	<li><a href="http://cakephp.org">CakePHP</a>
-	<ul><li><?php echo __d('cake_dev', 'The Rapid Development Framework'); ?></li></ul></li>
-	<li><a href="http://book.cakephp.org"><?php echo __d('cake_dev', 'CakePHP Documentation'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Your Rapid Development Cookbook'); ?></li></ul></li>
-	<li><a href="http://api.cakephp.org"><?php echo __d('cake_dev', 'CakePHP API'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Quick API Reference'); ?></li></ul></li>
-	<li><a href="http://bakery.cakephp.org"><?php echo __d('cake_dev', 'The Bakery'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Everything CakePHP'); ?></li></ul></li>
-	<li><a href="http://plugins.cakephp.org"><?php echo __d('cake_dev', 'CakePHP Plugins'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'A comprehensive list of all CakePHP plugins created by the community'); ?></li></ul></li>
-	<li><a href="http://community.cakephp.org"><?php echo __d('cake_dev', 'CakePHP Community Center'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Everything related to the CakePHP community in one place'); ?></li></ul></li>
-	<li><a href="https://groups.google.com/group/cake-php"><?php echo __d('cake_dev', 'CakePHP Google Group'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Community mailing list'); ?></li></ul></li>
-	<li><a href="irc://irc.freenode.net/cakephp">irc.freenode.net #cakephp</a>
-	<ul><li><?php echo __d('cake_dev', 'Live chat about CakePHP'); ?></li></ul></li>
-	<li><a href="https://github.com/cakephp/"><?php echo __d('cake_dev', 'CakePHP Code'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Find the CakePHP code on GitHub and contribute to the framework'); ?></li></ul></li>
-	<li><a href="https://github.com/cakephp/cakephp/issues"><?php echo __d('cake_dev', 'CakePHP Issues'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'CakePHP Issues'); ?></li></ul></li>
-	<li><a href="https://github.com/cakephp/cakephp/wiki#roadmaps"><?php echo __d('cake_dev', 'CakePHP Roadmaps'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'CakePHP Roadmaps'); ?></li></ul></li>
-	<li><a href="http://training.cakephp.org"><?php echo __d('cake_dev', 'Training'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Join a live session and get skilled with the framework'); ?></li></ul></li>
-	<li><a href="http://cakefest.org"><?php echo __d('cake_dev', 'CakeFest'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Don\'t miss our annual CakePHP conference'); ?></li></ul></li>
-	<li><a href="http://cakefoundation.org"><?php echo __d('cake_dev', 'Cake Software Foundation'); ?> </a>
-	<ul><li><?php echo __d('cake_dev', 'Promoting development related to CakePHP'); ?></li></ul></li>
-</ul>
+
+
+<div id="scrollbar" class="scrollbar">
+    <div class="handle">
+        <div class="mousearea"></div>
+    </div>
+</div>
+
+<div id="frame" class="frame">
+
+
+    <div id="host" class="host">
+            <span class="mobileMenuBars" id="idMobileMenuBars">
+                    <i  class="fa fa-bars fa-2"></i>
+            </span>
+        <div class="menu">
+
+
+            <div class="topMenu">
+                <ul>
+                    <li><a class="tooltip" data-tooltip="map view" href=" "><i class="fa fa-map-marker fa-lg"></i></a></li>
+                    <li ><a class="tooltip" data-tooltip="data visualization"><i class="fa fa-bar-chart fa-lg"></i></a></li>
+
+                    <li><a class="tooltip" data-tooltip="details" href="ourpeople"><i class="fa fa-picture-o fa-lg"></i></a></li>
+
+                    <li><a class="tooltip" data-tooltip="add case" href="add"><i class="fa fa-plus fa-lg"></i></a></li>
+                    <li><a class="tooltip" data-tooltip="dashboard" href="dashbrd"><i class="fa fa-tachometer fa-lg"></i></a></li>
+                    <li style="display: none"><a class="tooltip" data-tooltip="validate cases"><i class="fa fa-gavel fa-lg"></i></a></li>
+
+                </ul>
+
+            </div>
+            <div class="bottomMenu">
+                <div class="container">
+                    <div class="host farLeftOffscreen" >
+                        <span><i class="fa fa-gavel fa-lg" style="float: left"></i></span><span><i class="fa fa-gavel fa-lg" style="float: left"></i></span>
+                        <div class="authItems">
+
+
+                            <a class="tooltip" data-tooltip="Facebook"><i class="fa fa-facebook-official"></i></a>
+                            <a class="tooltip" data-tooltip="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
+                            <a class="tooltip" data-tooltip="Google"><i class="fa fa-google-plus"></i></a>
+                            <a class="tooltip" data-tooltip="Twitter"><i class="fa fa-twitter"></i></a>
+                            <a class="tooltip" data-tooltip="Yahoo!"><i class="fa fa-yahoo"></i></a>
+                            <a class="tooltip" data-tooltip="Microsoft"><i class="fa fa-windows"></i></a>
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <span id="idLogin" class="authIcon"><a class="tooltip" data-tooltip="log in"><i class="fa fa-sign-in fa-lg selected"></i></a></span>
+                <span id="idLogoff" class="authIcon"><a class="tooltip" data-tooltip="log off"><i class="fa fa-sign-out fa-lg selected"></i></a></span>
+                <!--<i class="fa fa-sign-in selected"></i>
+                <span class="logIn"></span>-->
+
+            </div>
+            <div class="bottomMenuMobile">
+                <span id="idMobileLogIn" class="authIcon tooltip" data-tooltip="log in"><i class="fa fa-sign-in fa-lg selected"></i></span>
+                <span id="idMobileLogoff" class="authIcon tooltip" data-tooltip="log off"><i class="fa fa-sign-out fa-lg selected"></i></span>
+                <div class="authItems">
+                    <ul>
+                        <li><a class="tooltip" data-tooltip="Facebook"><i class="fa fa-facebook-official fa-lg"></i></a></li>
+                        <li><a class="tooltip" data-tooltip="LinkedIn"><i class="fa fa-linkedin-square fa-lg"></i></a></li>
+                        <li><a class="tooltip" data-tooltip="Google"><i class="fa fa-google-plus fa-lg"></i></a></li>
+                        <li><a class="tooltip" data-tooltip="Twitter"><i class="fa fa-twitter fa-lg"></i></a></li>
+                        <li><a class="tooltip" data-tooltip="Yahoo!"><i class="fa fa-yahoo fa-lg"></i></a></li>
+                        <li><a class="tooltip" data-tooltip="Microsoft"><i class="fa fa-windows fa-lg"></i></a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div id="content" class="content">
+            <div style="position: absolute; top: 20%;left: 20%">
+                <div class="titleText catchyPhrase"> Sauvons notre nation.</div>
+            </div>
+            <!--
+            <div class="regularText" style="position: absolute"> The quick brown fox jumps over the lazy dog</div>
+            <div class="entryText2"> The quick brown fox jumps over the lazy dog</div>
+            <div class="entryText3"> The quick brown fox jumps over the lazy dog</div>
+            <div class="entryText4"> The quick brown fox jumps over the lazy dog</div>
+
+            <div class="entryText1"> The quick brown fox jumps over the lazy dog</div>
+
+
+            -->
+            <div ng-view style="height: 100%;width: 100%;position: relative;display: inline-block;">
+
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+<div id="loader-wrapper">
+    <div id="loader"></div>
+    <div class="titleText "> Sauvons notre nation.</div>
+    <div class="notifier hide" style="color: #000000;">
+        <i class="fa fa-spinner fa-pulse fa-3x"></i>
+        <span class="notifierContent"></span>
+    </div>
+</div>
+
+<script type="text/javascript"  src="js/libs.min.js"></script>
+<!--<script type="text/javascript"  src="js/libs/plugins.js"></script>
+<script type="text/javascript" src="js/libs/fileImporter.js"></script>-->
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-animate.min.js" type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-touch.min.js"  type="text/javascript"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-route.min.js" type="text/javascript"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js" type="text/javascript"></script>
+
+<script type="text/javascript"  src="js/bottom_libs.min.js"></script>
+
+<script src="js/libs/index.min.js" type="text/javascript"></script>
+<script src="js/motor/main.js" type="text/javascript"></script>
+

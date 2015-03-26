@@ -385,8 +385,9 @@ Cache::config('_cake_model_', array(
 	'serialize' => ($engine === 'File'),
 	'duration' => $duration
 ));
-
+/*
 Configure::write(
     'DebugKit.panels',
-    array_merge((array)Configure::read('DebugKit.panels'), ['MyPlugin.MyCustomPanel'])
+    array_merge((array)Configure::read('DebugKit.panels')) //, ['MyPlugin.MyCustomPanel']
 );
+*/

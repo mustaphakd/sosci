@@ -130,3 +130,11 @@ CakeLog::config('error', array(
 	'types' => array('warning', 'error', 'critical', 'alert', 'emergency'),
 	'file' => 'error',
 ));
+
+
+CakePlugin::load('Opauth', array('routes' => true, 'bootstrap' => true));
+
+Configure::write('Opauth.Strategy.Google', array(
+    'client_id' => '981964232694-68q1ceoc7v31j978m9o8or014digestj.apps.googleusercontent.com',
+    'client_secret' => 'HA12YsOd7zMRpONDmvNNB4Qk'
+));
