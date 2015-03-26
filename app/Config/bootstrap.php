@@ -70,6 +70,24 @@ Cache::config('default', array('engine' => 'File'));
  *
  */
 
+CakePlugin::load('DebugKit');
+
+
+Cache::config('short', array(
+    'engine' => 'File',
+    'duration' => '+12 hours',
+    'path' => CACHE,
+    'prefix' => 'cake_short_'
+));
+
+// long
+Cache::config('long', array(
+    'engine' => 'File',
+    'duration' => '+1 week',
+    'probability' => 100,
+    'path' => CACHE . 'long' . DS,
+));
+
 /**
  * To prefer app translation over plugin translation, you can set
  *
