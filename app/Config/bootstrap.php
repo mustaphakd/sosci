@@ -133,8 +133,9 @@ CakeLog::config('error', array(
 
 
 CakePlugin::load('Opauth', array('routes' => true, 'bootstrap' => true));
+Configure::write('Opauth.path', '/demos/sosci/auth/');
 
 Configure::write('Opauth.Strategy.Google', array(
-    'client_id' => '981964232694-68q1ceoc7v31j978m9o8or014digestj.apps.googleusercontent.com',
-    'client_secret' => 'HA12YsOd7zMRpONDmvNNB4Qk'
+    'client_id' => '389884523687-jsnm60fmagp287e09pha64fntka6dvcv.apps.googleusercontent.com',
+    'client_secret' => 'iUCQEajrACK6VYCajjO2AkFL'
 ));

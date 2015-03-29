@@ -2,18 +2,7 @@
  * Created by Mustapha on 2/15/2015.
  */
 
-function getPathName(){
-    var pathName = window.location.pathname;
-    var pathlength = pathName.length;
-    var lastChar = pathName.charAt(pathlength - 1);
 
-    if(lastChar == "/")
-    {
-        pathName = pathName.slice(0, pathlength - 1);
-    }
-
-    return pathName;
-}
 
 var appServices = angular.module('appServices', []);
 

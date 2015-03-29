@@ -277,6 +277,15 @@ div.bottomMenu .container{
   position: relative;
 }
 
+[data-auth], [data-tooltip]{
+  cursor: pointer!important;
+}
+
+#userPic{
+  width: 39px;
+  margin-top: 5px;
+}
+
 /*.content {
   position: relative;
   float: left;

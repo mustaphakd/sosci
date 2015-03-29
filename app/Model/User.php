@@ -41,13 +41,10 @@ class User extends AppModel {
 			'datetime' => array(
 				'rule' => array('datetime'))
 		),
-		'password' => array(
-			'notEmpty' => array(
-				'rule' => array('notEmpty'))
-		),
+		'password' => "",
 		'role' => array(
-			'numeric' => array(
-				'rule' => array('numeric'))
+            'maxLength' => array(
+                'rule' => array('maxLength', 100))
 		)
 	);
 
@@ -87,4 +84,12 @@ class User extends AppModel {
 		)
 	);
 
+
+    public function beforeSave($options = array()){
+        if(isset($this->data[$this->alias]['password'])){
+            $passwordHasher = new BlowfishPasswordHasher();
+            $this->data[$this->alias]['password'] = $passwordHasher->hash($this->data[$this->alias]['password']);
+        }
+        return true;
+    }
 }

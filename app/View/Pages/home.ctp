@@ -52,12 +52,16 @@
                     <li ><a class="tooltip" data-tooltip="data visualization"><i class="fa fa-bar-chart fa-lg"></i></a></li>
 
                     <li><a class="tooltip" data-tooltip="details" href="ourpeople"><i class="fa fa-picture-o fa-lg"></i></a></li>
+                    <?php if(AuthComponent::user('id')){ ?>
 
-                    <li><a class="tooltip" data-tooltip="add case" href="add"><i class="fa fa-plus fa-lg"></i></a></li>
-                    <li><a class="tooltip" data-tooltip="dashboard" href="dashbrd"><i class="fa fa-tachometer fa-lg"></i></a></li>
-                    <li style="display: none"><a class="tooltip" data-tooltip="validate cases"><i class="fa fa-gavel fa-lg"></i></a></li>
+                        <li><a class="tooltip" data-tooltip="add case" href="add"><i class="fa fa-plus fa-lg"></i></a></li>
+                        <li><a class="tooltip" data-tooltip="dashboard" href="dashbrd"><i class="fa fa-tachometer fa-lg"></i></a></li>
+                        <li style="display: none"><a class="tooltip" data-tooltip="validate cases"><i class="fa fa-gavel fa-lg"></i></a></li>
 
-                </ul>
+                        <!--Logged in as < ? = //AuthComponent::user('name')
+                        ?> -->
+                    <?php } ?>
+                         </ul>
 
             </div>
             <div class="bottomMenu">
@@ -67,12 +71,12 @@
                         <div class="authItems">
 
 
-                            <a class="tooltip" data-tooltip="Facebook"><i class="fa fa-facebook-official"></i></a>
-                            <a class="tooltip" data-tooltip="LinkedIn"><i class="fa fa-linkedin-square"></i></a>
-                            <a class="tooltip" data-tooltip="Google"><i class="fa fa-google-plus"></i></a>
-                            <a class="tooltip" data-tooltip="Twitter"><i class="fa fa-twitter"></i></a>
-                            <a class="tooltip" data-tooltip="Yahoo!"><i class="fa fa-yahoo"></i></a>
-                            <a class="tooltip" data-tooltip="Microsoft"><i class="fa fa-windows"></i></a>
+                            <a class="tooltip" data-tooltip="Facebook" data-auth="facebook"><i class="fa fa-facebook-official"></i></a>
+                            <a class="tooltip" data-tooltip="LinkedIn" data-auth="linkedin"><i class="fa fa-linkedin-square"></i></a>
+                            <a class="tooltip" data-tooltip="Google" data-auth="google"><i class="fa fa-google-plus"></i></a>
+                            <a class="tooltip" data-tooltip="Twitter" data-auth="twitter"><i class="fa fa-twitter"></i></a>
+                            <a class="tooltip" data-tooltip="Yahoo!" data-auth="yahoo"><i class="fa fa-yahoo"></i></a>
+                            <a class="tooltip" data-tooltip="Microsoft" data-auth="microsoft" ><i class="fa fa-windows"></i></a>
                         </div>
                     </div>
 
@@ -81,8 +85,11 @@
 
                 <span id="idLogin" class="authIcon"><a class="tooltip" data-tooltip="log in"><i class="fa fa-sign-in fa-lg selected"></i></a></span>
                 <span id="idLogoff" class="authIcon"><a class="tooltip" data-tooltip="log off"><i class="fa fa-sign-out fa-lg selected"></i></a></span>
-                <!--<i class="fa fa-sign-in selected"></i>
-                <span class="logIn"></span>-->
+                <div class="container hide" id="loginCarte">
+                    <a class="tooltip" data-tooltip="">
+                        <img id="userPic" src="">
+                    </a>
+                </div>
 
             </div>
             <div class="bottomMenuMobile">
@@ -90,12 +97,12 @@
                 <span id="idMobileLogoff" class="authIcon tooltip" data-tooltip="log off"><i class="fa fa-sign-out fa-lg selected"></i></span>
                 <div class="authItems">
                     <ul>
-                        <li><a class="tooltip" data-tooltip="Facebook"><i class="fa fa-facebook-official fa-lg"></i></a></li>
-                        <li><a class="tooltip" data-tooltip="LinkedIn"><i class="fa fa-linkedin-square fa-lg"></i></a></li>
-                        <li><a class="tooltip" data-tooltip="Google"><i class="fa fa-google-plus fa-lg"></i></a></li>
-                        <li><a class="tooltip" data-tooltip="Twitter"><i class="fa fa-twitter fa-lg"></i></a></li>
-                        <li><a class="tooltip" data-tooltip="Yahoo!"><i class="fa fa-yahoo fa-lg"></i></a></li>
-                        <li><a class="tooltip" data-tooltip="Microsoft"><i class="fa fa-windows fa-lg"></i></a></li>
+                        <li data-auth="facebook"><a class="tooltip" data-tooltip="Facebook"><i class="fa fa-facebook-official fa-lg"></i></a></li>
+                        <li data-auth="linkedin"><a class="tooltip" data-tooltip="LinkedIn"><i class="fa fa-linkedin-square fa-lg"></i></a></li>
+                        <li data-auth="google"><a class="tooltip" data-tooltip="Google"><i class="fa fa-google-plus fa-lg"></i></a></li>
+                        <li data-auth="twitter"><a class="tooltip" data-tooltip="Twitter"><i class="fa fa-twitter fa-lg"></i></a></li>
+                        <li data-auth="yahoo"><a class="tooltip" data-tooltip="Yahoo!"><i class="fa fa-yahoo fa-lg"></i></a></li>
+                        <li data-auth="microsoft" ><a class="tooltip" data-tooltip="Microsoft"><i class="fa fa-windows fa-lg"></i></a></li>
                     </ul>
                 </div>
             </div>

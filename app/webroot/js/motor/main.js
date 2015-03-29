@@ -10,13 +10,68 @@
 * Notes that authentication session is not deleted,m thus kept on browser refresh.
 * */
 sessionStorage.removeItem("controllerScripts");
+function getPathName(){
+    var pathName = window.location.pathname;
+    var pathlength = pathName.length;
+    var lastChar = pathName.charAt(pathlength - 1);
+
+    if(lastChar == "/")
+    {
+        pathName = pathName.slice(0, pathlength - 1);
+    }
+
+    return pathName;
+}
+
+function _hasPopupBlocker(poppedWindow) {
+    var result = false;
+
+    try {
+        if (typeof poppedWindow == 'undefined') {
+            // Safari with popup blocker... leaves the popup window handle undefined
+            result = true;
+        }
+        else if (poppedWindow && poppedWindow.closed) {
+            // This happens if the user opens and closes the client window...
+            // Confusing because the handle is still available, but it's in a "closed" state.
+            // We're not saying that the window is not being blocked, we're just saying
+            // that the window has been closed before the test could be run.
+            result = false;
+        }
+        else if (poppedWindow && poppedWindow.test) {
+            // This is the actual test. The client window should be fine.
+            result = false;
+        }
+        else {
+            // Else we'll assume the window is not OK
+            result = true;
+        }
+
+    } catch (err) {
+        //if (console) {
+        //    console.warn("Could not access popup window", err);
+        //}
+    }
+
+    return result;
+}
 // For browser refresh $window.location.href.
 //future http://turfjs.org/-validate lr
 var suotin = {
     isMobileDevice: true,
+    alreadyInit: false,
     init:function(){
 
+       if(this.alreadyInit == false)
+        {
+            //$(document).bind('authcompleted', suotin.security.authCompletedHandler);
+            localStorage.removeItem("securityToken");
+            this.alreadyInit = true;
+        }
+
         //TODO: if log in cookie is present, then user is logged in
+
+        suotin.initialDefaultLocation = getPathName();
 
         if(verge){
             if(verge.viewportW() > 767){ //tablet && desktop
@@ -81,9 +136,107 @@ var suotin = {
         isLoggedIn: function(){
             return this._loggedIn;
         },
-        signIn: function(){this._loggedIn = true;},
+        signIn: function(providerName, callbck){
+            if((providerName != undefined) && (providerName != null) && (providerName != ""))
+            {
+                var authPath = window.location.origin + suotin.initialDefaultLocation + suotin.security.authEndpoint + providerName;
+                // window location base path href
+                    // append auth/providerName
+                //launch poop wind with url
+                var wdth = 560;
+                var hght = 650;
+                var top = 0; //default and suited for mobile
+                var lft = 0; //default and suited for mobile
+                if(suotin.flags.mobile == suotin.currentViewportClient)
+                {
+                    if(verge.viewportW() < wdth )
+                        wdth = verge.viewportW();
+                    if(verge.viewportH() < hght)
+                        hght = verge.viewportH();
+
+                }
+                else
+                {
+                    top = "5%";
+                    lft = "15%";
+
+                }
+                // set wide mask on actual widown to disable further interaction from user if popup actually does get displayed
+                //blank makes sure it is a window and not tab
+
+                localStorage.removeItem("securityTokenAuthDone");
+                suotin.openWin = window.open(authPath, '_blank', "directories=no,height="+ hght +",width="+ wdth +",menubar=no,resizable=no,titlebar=no,top=" + top +",left="+ lft +",location=no,modal=yes,alwaysRaised=yes,dialog=true"); //scrollbars=no,status=no,
+
+                var pollTimer = null;
+
+                /*window.setTimeout(function() {
+                    openWin.onclose = suotin.security.funcLoginWinClosed;
+                }, 2000);*/
+
+
+/*
+                window.setTimeout(function(){
+                    if(_hasPopupBlocker(openWin))
+                    {
+                        alert("Please, enable pop ups for your browsers to use third parties authentication providers");
+                        return;
+                    }
+
+                    pollTimer = window.setInterval(function() {
+                        if (openWin.isClosed != false) { // !== is required for compatibility with Opera
+
+                        }
+                        else
+                        {
+                            window.clearInterval(pollTimer);
+                            // on close Evt
+                            //check sessionStorage.securityToken existence
+                            //if ys. set _loggin to true
+                            //call callback
+                            openWin = null;
+                            callbck();
+                        }
+                    }, 200);
+                }, 5000);
+
+*/
+
+
+
+
+                this.authCompleteIntervalToken = window.setInterval(function(){
+
+                    if(localStorage.securityTokenAuthDone == undefined)
+                    {
+
+                    }
+                    else
+                    {
+                        window.clearInterval(suotin.security.authCompleteIntervalToken);
+                        suotin.security.authCompleteIntervalToken = null;
+                        //debugger;
+                        //suotin.openWin.focus();
+                        //suotin.openWin.close(true);
+
+                        suotin.openWin = null;
+                        //callbck();
+                        suotin.security.authCompletedHandler();
+                    }
+
+                }, 500);
+
+            }
+            this._loggedIn = true;
+        },
         _loggedIn: false,
-        signOff: function(){this._loggedIn = false;},
+        signOff: function(){
+            //this._loggedIn = false;
+            sessionStorage.removeItem("securityToken");
+            /* no need if(suotin.flags.mobile != suotin.currentViewportClient){
+                //remove image mouser over and name
+            }*/
+            window.location.href = suotin.initialDefaultLocation + "/users/logoff";
+        },
         listenSignOffEvent: function(){
             if(suotin.flags.desktblet == suotin.currentViewportClient || suotin.flags.NA == suotin.currentViewportClient){
                 $(".bottomMenuMobile div.authItems ").hide();
@@ -118,20 +271,31 @@ var suotin = {
                     if($(".bottomMenu .container div.host").hasClass("farLeftOffscreen")) //auth menu not showing
                     {
                         $(".bottomMenu .container div.host").removeClass("farLeftOffscreen"); // now showing
-                        $(".bottomMenu .container div.host .authItems a").on("click", function(){ // listen to one of the auth clicks and do the ting
-                            suotin.security.signIn();
+                        $(".bottomMenu .container div.host .authItems a").on("click", function(evt){ // listen to one of the auth clicks and do the ting
 
-                            if(suotin.security.isLoggedIn())
-                            {
-                                $(".bottomMenu .container div.host").addClass("farLeftOffscreen");
-                                $("#idLogin").removeClass("authClassOnForlargeScreen")
-                                    .off("click");
-                                $("#idLogoff").addClass("authClassOnForlargeScreen");
+                            //get the data-auth attribute value of target element and pass it in to the signin method below
+                            var providerName = $(this).data('auth');
 
-                                $(".bottomMenu .container div.host .authItems a").off("click");
 
-                                suotin.security.listenSignOffEvent();
-                            }
+                            // append the rest of the logic as a callback (2nd arg ) to the signin method
+
+                            suotin.security.signIn(providerName, function(){
+                                if(suotin.security.isLoggedIn())
+                                {
+
+                                    $("#idLogin").removeClass("authClassOnForlargeScreen")
+                                        .off("click");
+                                    $("#idLogoff").addClass("authClassOnForlargeScreen");
+
+
+
+                                    suotin.security.listenSignOffEvent();
+                                }
+                            });
+                            $(".bottomMenu .container div.host").addClass("farLeftOffscreen");
+                            $(".bottomMenu .container div.host .authItems a").off("click");
+
+
                         });
                     }
                     else
@@ -163,6 +327,29 @@ var suotin = {
             }
         },
         configureSecurity: function(viewPortClient){
+
+            //Check Session for security token
+            //debugger
+            if(sessionStorage.securityToken)
+            {
+                var securityToken = JSON.parse(sessionStorage.securityToken);
+
+                //suotin.security._loggedIn  to be set based on token validation
+                if(securityToken.validated == true){
+                    suotin.security._loggedIn = true;
+
+                    if(suotin.flags.mobile != suotin.currentViewportClient){
+                        //set image mouser over and name
+
+                       var carte =  $("#loginCarte").removeClass("hide");
+                        carte.find("a.tooltip").first().attr("data-tooltip", securityToken.name);
+
+                        carte = null;
+                        $("#userPic").attr("src",securityToken.image );
+
+                    }
+                }
+            }
             switch (viewPortClient)
             {
                 case suotin.flags.desktblet: //deskblet
@@ -191,7 +378,23 @@ var suotin = {
                     }
                     break;
             }
-        }
+        },
+        authEndpoint: "/auth/",
+        funcLoginWinClosed: function(evt){
+            alert("closed");
+        },
+        authCompletedHandler: function(evt){
+            var secuTok = JSON.parse(localStorage.securityToken);
+            localStorage.removeItem("securityToken");
+
+            if(secuTok.validated == true){
+                sessionStorage.securityToken = JSON.stringify(secuTok);
+
+                window.location.href = suotin.initialDefaultLocation;
+
+            }
+        },
+        authCompleteIntervalToken: null
     },
     loaderVM: {
         showMainLoader: function(){
@@ -279,7 +482,8 @@ var suotin = {
     },
     storePreviousLocation: true,
     previousLocation: null,
-    currentLocation:null
+    currentLocation:null,
+    initialDefaultLocation:""
 };
 
 function resolveController($q, $timeout, controllerName){
