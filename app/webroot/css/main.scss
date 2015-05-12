@@ -1364,4 +1364,12 @@ button {
   font-size: 20px;
 }
 
+#imgView{
+  //-webkit-scrollbar{ width: 0 !important };
+}
+
+::-webkit-scrollbar {
+  width: 0 !important;
+}
+
 /**************************/

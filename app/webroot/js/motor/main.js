@@ -589,9 +589,9 @@ function configularAngJs(){
 
         $routeProvider
             .when("/", { templateUrl: "views/home.html", reloadOnSearch: false, controller: "homeController"}) //
-            .when("/ourpeople", { templateUrl: "views/gallery.html", resolve:{found: function($q, $timeout){ resolveController($q, $timeout, "gallery");}} })//, reloadOnSearch: false
-            .when("/add", { templateUrl: "views/add_case.html",reloadOnSearch: false, resolve:{found: function($q, $timeout){ resolveController($q, $timeout, "addCase");}} })//
-            //.when("/stats", { templateUrl: "views/stats.html", controller:"statsController", reloadOnSearch: false })//
+            .when("/ourpeople", { templateUrl: "views/gallery.html", reloadOnSearch: false, resolve:{found: function($q, $timeout){ resolveController($q, $timeout, "gallery");}} })
+            .when("/add", { templateUrl: "views/add_case.html",reloadOnSearch: false, resolve:{found: function($q, $timeout){ resolveController($q, $timeout, "addCase");}} })
+            .when("/dataviz", { templateUrl: "views/dataviz.html", reloadOnSearch: false, resolve:{found: function($q, $timeout){ resolveController($q, $timeout, "stats");}} })
             .when("/dashbrd", { templateUrl: "views/dashbrd.html", reloadOnSearch: false, resolve:{found: function($q, $timeout){ resolveController($q, $timeout, "dashboard");}} })
             //.when("/validate", { templateUrl: "views/validate.html", controller:"validateController", reloadOnSearch: false })
            ;// .otherwise({ redirectTo: "/" });

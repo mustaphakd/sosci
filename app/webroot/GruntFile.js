@@ -33,6 +33,10 @@ module.exports = function(grunt) {
             src_libs_min:{
                 src:['js/libs_pre.min.js', 'js/libs/appframework.ui.min.js'],
                 dest:'js/libs.min.js'
+            },
+            src_msnry_imgLoaded:{
+                src:['js/libs/masonry.pre.pkgd.min.js', 'js/libs/imagesLoaded.pkgd.min.js'],
+                dest:'js/libs/masonry.pkgd.min.js'
             }
         },
         uglify : {
@@ -55,7 +59,8 @@ module.exports = function(grunt) {
         'concat:src_lbs',
         'concat:src_bottom_lbs',
         'uglify:libs_mv',
-        'concat:src_libs_min'
+        'concat:src_libs_min',
+        'concat:src_msnry_imgLoaded'
     ]);
 
 };

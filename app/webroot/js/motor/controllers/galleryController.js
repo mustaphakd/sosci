@@ -84,7 +84,12 @@ appSuotin.gallery.controller = function ($scope){
 
                     appSuotin.lazyLoader.compile(child[0])( newScope);
 
-                    $scope.msnry.layout();
+                    $scope.msnryContainer.imagesLoaded( function() {
+                       // $container.masonry();
+                        $scope.msnry.layout();
+                    });
+
+                    //$scope.msnry.layout();
                     child = null;
 
                     $scope.vctms.push(nwVtm);
@@ -340,6 +345,13 @@ jQuery(function($){
             appSuotin.gallery.init();
             appSuotin.modulePromise.resolve(true);
             suotin.frame.reload();
+
+            var isChromium = !!window.chrome;
+
+            if(isChromium){
+                $("#imgView").css("overflow-y", "visible");
+
+            }
         });
 
    /* }
