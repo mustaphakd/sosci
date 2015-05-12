@@ -36,211 +36,13 @@ appDirectives.directive('leafletMap',["$compile", function leafletMap ($compile)
             showVictimList: '@',
             containerSelector: '@',
             victims: '='
-            //autoInit:'='
         },
         controller: function($scope){
+            $scope.victimsLoaderFlag = $scope.$parent.victimsLoaderFlag;
             $scope.map = null;
             $scope.control = null;
             $scope.mapView = "default"; //default, heat, chloro
             $scope.currentView = "default";
-
-            //debugger;
-            /*if(!angular.isDefined($scope.victims) || $scope.victims.length == 0) {
-                $scope.victims = [
-                    {
-                        idx: 0,
-                        occurenceDate: "12/30/2015"  ,
-                        name: "lopiioa_1",
-                        ageGrp: "young adult",
-                        location: "school",
-                        detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                        status: "open",
-                        gndr: "f",
-                        lat: "7.707134",
-                        lng: "-5.026487"
-                    },
-                    {
-                        idx: 1,
-                        occurenceDate: "02/15/2015"  ,
-                        name: "etrs_2",
-                        ageGrp: "young adult",
-                        location: "home",
-                        detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                        status: "pending",
-                        gndr: "m",
-                        lat: "7.704519",
-                        lng: "-5.033278"
-                    },
-                    {
-                        idx: 2,
-                        occurenceDate: "12/05/2015"  ,
-                        name: "lopiioa_3",
-                        ageGrp: "young adult",
-                        location: "school",
-                        detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                        status: "unknown",
-                        gndr: "m",
-                        lat: "7.701255",
-                        lng: "-5.028750"
-                    },
-                    {
-                        idx: 3,
-                        occurenceDate: "01/30/2015"  ,
-                        name: "etrs_4",
-                        ageGrp: "young adult",
-                        location: "home",
-                        detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                        status: "unresolved",
-                        gndr: "m",
-                        lat: "7.699981",
-                        lng: "-5.039817"
-                    },
-                    {
-                        idx: 4,
-                        occurenceDate: "02/03/2015"  ,
-                        name: "lopiioa_5",
-                        ageGrp: "young adult",
-                        location: "school",
-                        detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                        status: "pending",
-                        gndr: "f",
-                        lat: "7.685189",
-                        lng: "-5.031336"
-                    },
-                    {
-                        idx: 5,
-                        occurenceDate: "10/21/2015"  ,
-                        name: "etrs_6",
-                        ageGrp: "young adult",
-                        location: "home",
-                        detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                        status: "open",
-                        gndr: "m",
-                        lat: "7.682957",
-                        lng: "-5.029641"
-                    },
-                    {
-                        idx: 6,
-                        occurenceDate: "07/10/2015"  ,
-                        name: "lopiioa_7",
-                        ageGrp: "young adult",
-                        location: "school",
-                        detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                        status: "unresolved",
-                        gndr: "f",
-                        lat: "7.683935",
-                        lng: "-5.028332"
-                    },
-                    {
-                        idx: 7,
-                        occurenceDate: "04/13/2015"  ,
-                        name: "etrs_8",
-                        ageGrp: "young adult",
-                        location: "home",
-                        detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                        status: "pending",
-                        gndr: "f",
-                        lat: "7.683212",
-                        lng: "-5.023043"
-                    },
-                    {
-                        idx: 8,
-                        occurenceDate: "07/07/2015"  ,
-                        name: "lopiioa_9",
-                        ageGrp: "young adult",
-                        location: "school",
-                        detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                        status: "closed",
-                        gndr: "f",
-                        lat: "7.682818",
-                        lng: "-5.018451"
-                    },
-                    {
-                        idx: 9,
-                        occurenceDate: "06/10/2015"  ,
-                        name: "etrs_10",
-                        ageGrp: "young adult",
-                        location: "home",
-                        detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                        status: "open",
-                        gndr: "m",
-                        lat: "7.671612",
-                        lng: "-5.016090"
-                    },
-                    {
-                        idx: 10,
-                        occurenceDate: "11/26/2015"  ,
-                        name: "lopiioa_11",
-                        ageGrp: "young adult",
-                        location: "school",
-                        detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                        status: "pending",
-                        gndr: "m",
-                        lat: "7.680039",
-                        lng: "-5.056994"
-                    },
-                    {
-                        idx: 11,
-                        occurenceDate: "12/31/2015"  ,
-                        name: "etrs_12",
-                        ageGrp: "young adult",
-                        location: "home",
-                        detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                        status: "unresolved",
-                        gndr: "m",
-                        lat: "7.688630",
-                        lng: "-5.066178"
-                    },
-                    {
-                        idx: 12,
-                        occurenceDate: "05/20/2015"  ,
-                        name: "lopiioa_13",
-                        ageGrp: "young adult",
-                        location: "school",
-                        detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                        status: "pending",
-                        gndr: "f",
-                        lat: "7.719377",
-                        lng: "-5.057766"
-                    },
-                    {
-                        idx: 13,
-                        occurenceDate: "03/13/2015"  ,
-                        name: "etrs_14",
-                        ageGrp: "young adult",
-                        location: "home",
-                        detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                        status: "unknown",
-                        gndr: "m",
-                        lat: "7.686971",
-                        lng: "-5.084932"
-                    },
-                    {
-                        idx: 14,
-                        occurenceDate: "02/06/2015"  ,
-                        name: "lopiioa_15",
-                        ageGrp: "young adult",
-                        location: "school",
-                        detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                        status: "open",
-                        gndr: "f",
-                        lat: "7.672043",
-                        lng: "-5.049055"
-                    },
-                    {
-                        idx: 15,
-                        occurenceDate: "10/15/2015"  ,
-                        name: "etrs_16",
-                        ageGrp: "young adult",
-                        location: "home",
-                        detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                        status: "unresolved",
-                        gndr: "f",
-                        lat: "7.660043",
-                        lng: "-5.052075"
-                    }
-                ];
-            }*/
 
             $scope.visibleWidth = null;
             $scope.orientation = "horizontal";
@@ -349,8 +151,31 @@ appDirectives.directive('leafletMap',["$compile", function leafletMap ($compile)
                 return false;
 
             };
+
+            $scope.markerCache = null;
+            $scope.markerIconCache = null;
             $scope.selectVictim = function(arrIdx, item, listItemId){
-                alert(arrIdx + "\n" + item.name + "\n" + "list item id: " +  arrIdx + "_li_victim");
+                var vctm = $scope.victims[arrIdx];
+
+                $scope.map.panTo(L.latLng(vctm.lat, vctm.lng));
+                vctm = null;
+
+                var layergroup = $scope.markerLayerGroup; //iterate over makers to find matching one
+
+                layergroup.eachLayer(function(mkrArg){
+
+                    var idx = mkrArg.options.idx;
+
+                    if(idx == this.idx){
+
+                        $scope.addMrkrAndIconToCache(mkrArg);
+                        mkrArg.setIcon($scope.selectedCaseIcon);
+                    }
+
+
+                }, {idx: arrIdx});
+
+                //alert(arrIdx + "\n" + item.name + "\n" + "list item id: " +  arrIdx + "_li_victim");
 
             };
             $scope.getTranslationX = function(transformVal){
@@ -437,6 +262,20 @@ appDirectives.directive('leafletMap',["$compile", function leafletMap ($compile)
             $scope.defaultMarkerClickHndlr = function(e){
                 $scope.map.panTo(e.latlng);
                 $scope.scrollMapTo(e.target.options.idx); // and perhaps some other id and or info
+                $scope.addMrkrAndIconToCache(e.target);
+                e.target.setIcon($scope.selectedCaseIcon);
+
+                var idx = e.target.options.idx
+                var url = $scope.victims[idx].url
+                var name = $scope.victims[idx].name;
+
+                var popup = L.popup({keepInView: true, className: "sauveLeafletPopup", offset: L.point(0, -10)})
+                    .setLatLng(e.latlng) //(assuming e.latlng returns the coordinates of the event)
+                    .setContent('<div class="popHostContainner">' +
+                        '<div class="popHost"><div class="poopImgHost"><img src=\"'+  url +'\" /></div><div class="popOverlay">'+ name +'</div>' +
+                        '</div>' +
+                    '</div>')
+                    .openOn($scope.map);
             };
 
             $scope.addMarkers = function(){
@@ -598,6 +437,30 @@ appDirectives.directive('leafletMap',["$compile", function leafletMap ($compile)
 
             appSuotin.leafletMapController = $scope;
 
+            $scope.selectedCaseIconEx = L.Icon.extend({
+                options: {
+                    iconSize:     [25, 41],
+                    iconAnchor: [12, 41],
+                    popupAnchor:  [-3, -76]
+                }
+            });
+
+            $scope.selectedCaseIcon = new $scope.selectedCaseIconEx({ iconUrl: 'imgs/marker-icon-greenish.png' });
+
+            $scope.addMrkrAndIconToCache = function(mkrArg){
+                if($scope.markerCache != mkrArg)
+                {
+                    if($scope.markerCache != null){
+                        $scope.markerCache.setIcon($scope.markerIconCache);
+                    }
+
+                    $scope.markerCache = $scope.markerIconCache = null;
+
+                    $scope.markerCache = mkrArg;
+                    $scope.markerIconCache = mkrArg.options.icon;
+                }
+            };
+
         },
         link: function(scope, iEle, iAttr){
 
@@ -671,14 +534,21 @@ appDirectives.directive('leafletMap',["$compile", function leafletMap ($compile)
                         scroller.innerHTML = '<div class="hframe" id="centered"><ul class="clearfix " style="min-width: 6040px" >' +
                         '<li ng-repeat="victim in victims" class="" id="{{victim.idx}}_li_victim " ng-click="selectVictim($index, victim )" >' +
                         '<div>' +
-                        '<span ng-class="{mlGndr : victim.gndr == \'m\' , fmlGndr : victim.gndr == \'f\' }"></span>' +
-                        '<div><span class="date-time" >{{victim.occurenceDate}} </span><span class="vctmAge"> {{victim.ageGrp}}</span> </div>' +
+                        '<span ng-class="{mlGndr : victim.gender == \'m\' , fmlGndr : victim.gender == \'f\' }"></span>' +
+                        '<div><span class="date-time" >{{victim.occurrencedate}} </span><span class="vctmAge"> {{victim.ageGroup}}</span> </div>' +
                         '   </div>' +
                         '<div class="vctmName">{{victim.name}}</div>' +
                             //'' +
                         '<div class="vctmSyn "><textarea  rows="5" cols="25">{{victim.detail}}</textarea></div>' +
                         '<div ng-class="{vctmstatus_open: victim.status == \'open\', vctmstatus_pending: victim.status == \'pending\', vctmstatus_unresolved: victim.status == \'unresolved\', vctmstatus_closed: victim.status == \'closed\', vctmstatus_unknown: victim.status == \'unknown\'}">{{victim.status}}</div>' +
                         '</li>' +
+                        '<li ng-show="$parent.victimsLoader" >' +
+                            '<div class="dataLoader"><span ></span></div>'+
+                        '</li>'+
+                        '<li ng-show="$parent.victimsLoaderFlag" style="margin-left: -150px;" >' +
+                        '<div class="dataLoaderGuard"><span ></span></div>'+
+                        '</li>'+
+
                         '</ul>'+
                             //'<div class="scroller-nav-container">' +
                         '<div class="left" ng-click="previous()"><i class="fa fa-chevron-left fa-5x"></i></div>' +

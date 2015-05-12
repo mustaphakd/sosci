@@ -9,7 +9,9 @@ appSuotin.addcase.controller = function($scope){
     $scope.showDone = false;
     $scope.mapAlreadyClicked = false;
     //$scope.caseModel ={};
-    $scope.newModel = {};
+    $scope.newModel = {
+    };
+
     $scope.selectedImageSourceItem = null;
 
     $scope.selectMap = function(){
@@ -147,22 +149,70 @@ appSuotin.addcase.controller = function($scope){
     };
 
     $scope.launchImageFinder = function(src){
-alert($scope.selectedImageSourceItem );
+
         switch ($scope.selectedImageSourceItem ){
             case 'flickr':
-                alert("flckr Source");
+                $scope.processImageFinder(suotin.security.authEndpoint + $scope.selectedImageSourceItem  , function(){
+
+                    //perhaps grab the upload path and put it inside the element
+                });
                 break;
 
             default :
                 break;
         }
-    }
+    };
+
+    $scope.processImageFinder = function(path, cllbck){
+        if(!Cookies.enabled){
+            alert("please enable cookies for your browser");
+            return;
+        }
+
+        Cookies.set('uploading', 'image');
+        Cookies.expire("upldToken");
+        Cookies.set('baggageDestination', suotin.initialDefaultLocation  );
+        localStorage.removeItem("ImageLocatorDone");
+        suotin.security.SecuredPopup(path, false);
+
+        suotin.security.authCompleteIntervalToken = appSuotin.lazyLoader.interval(function(){
+
+            if(localStorage.ImageLocatorDone == undefined)
+            { }
+            else
+            {
+                appSuotin.lazyLoader.interval.cancel(suotin.security.authCompleteIntervalToken);
+                suotin.security.authCompleteIntervalToken = null;
+
+                suotin.openWin = null;
+
+
+                 var imageUrl = JSON.parse(localStorage.ImageLocatorDone);
+                $scope.newModel.imageUrl = imageUrl;
+                $("#txtPic").focus();
+
+
+                localStorage.removeItem("ImageLocatorDone");
+
+               // cllbck();
+            }
+
+        }, 1000);
+    };
 
     $scope.$on(
         "$destroy",
         function handleDestroyEvent() {
-            //debugger;
 
+            if(suotin.security.authCompleteIntervalToken != null)
+            {
+                appSuotin.lazyLoader.interval.cancel(suotin.security.authCompleteIntervalToken);
+            }
+
+            Cookies.expire('uploading');
+            Cookies.expire("upldToken");
+            Cookies.expire('baggageDestination' );
+            localStorage.removeItem("ImageLocatorDone");
         }
     );
 
@@ -214,20 +264,12 @@ jQuery(function($){
 
                      appSuotin.addcase.scope.map = null;
                      appSuotin.addcase.scope.$destroy();
-                     //vw.remove();
 
-
-
-                     //appSuotin.addcase.scope.$$childHead = null;
                      appSuotin.addcase.scope = null;
                      appSuotin.addcase.compiled = null;
-                     //appSuotin.addcase.addCompiledMap = null;
                      appSuotin.addcase = null;
                      addcase_controller = null;
 
-
-
-                     //appSuotin.lazyLoader.controllers('addCaseController', null);
 
                      removejscssfile("addCaseController.js", "js");
                      var tmp = JSON.parse(sessionStorage.controllerScripts);
@@ -238,7 +280,6 @@ jQuery(function($){
                          sessionStorage.controllerScripts = JSON.stringify(tmp);
                          tmp = null;
                      }
-
                 }
              );
             vw= null;

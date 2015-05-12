@@ -20,91 +20,121 @@ appServices.factory('suotinService', [ "$location", "$q" ,"repositoryService","$
 
         var defr = $q.defer();
 
-
-
-
+        var test = getPathName();
         var req ={
             method: "POST",
-            url: getPathName() + "/api/victims/add",
+            url: suotin.initialDefaultLocation + "/api/victims/add",  //getPathName()
             headers: {
                 'Accept': "application/json",
                 'Content-Type': 'application/json'
             },
             data:{
-                /*name: newMedCenter.name,
-                province_id: newMedCenter.provinceId,
-                country_id: newMedCenter.countryId,
-                detail: newMedCenter.detail,
-                capacity: newMedCenter.capacity,
-                centertype: newMedCenter.centerType,
-                locationlat: newMedCenter.locationLat,
-                locationlong: newMedCenter.locationLong*/
+                name: victim.name,
+                crimetype: victim.crimeType,
+                picurl: victim.imageUrl,
+                detail: victim.detail,
+                locationlat: victim.lat,
+                locationlng: victim.lng,
+                agegroup: victim.ageGroup,
+                occurenceplace: victim.place,
+                casestatus: victim.status,
+                occurrencedate: victim.occurenceDate,
+                gender: victim.gender
             }
         }
 
-        service.timeoutToken = $timeout(function(){
+        /*service.timeoutToken = $timeout(function(){
             $timeout.cancel(service.timeoutToken);
             service.timeoutToken = null;
 
             defr.resolve(victim);
 
-        }, 2000);
+        }, 2000);*/
 
-/*        $http(req)
+        $http(req)
             .success(function(data, status, headers, config){
-                if(data.message == "success")
+                if(data.status != undefined &&  data.status.toLowerCase() == "success")
                 {
                     defr.resolve(null);
                 }
                 else
-                    defr.reject("Error: " + data);
+                    defr.reject("Error: " + data.message);
             })
             .error(function(data, status, headers, config){
                 defr.reject("Error: " + data);
             });
-*/
+
 
 
         return defr.promise;
     }
 
 
-    service.getVictims = function(){
+    service.getVictims = function(page){
+
+        /*
+        *
+        * name: victim.name,
+         crimetype: victim.crimeType,
+         picurl: victim.imageUrl,
+         detail: victim.detail,
+         locationlat: victim.lat,
+         locationlng: victim.lng,
+         agegroup: victim.ageGroup,
+         occurenceplace: victim.place,
+         casestatus: victim.status,
+         occurrencedate: victim.occurenceDate,
+         gender: victim.gender
+        * */
+
+
+        if(angular.isUndefined(page))
+            page =0;
 
         var newDeferred = $q.defer();
 
         var req ={
             method: "GET",
-            url: getPathName() + "/api/medsites/index",
+            url: suotin.initialDefaultLocation + "/api/victims/get?page=" + page,
             headers: {
                 'Accept': "application/json",
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'x-pageopo': page
             }
         }
-/*
+
         $http(req)
             .success(function(data, status, headers, config){
-                if(data.message == "success")
+                if(data != undefined && data.status != undefined && data.status.toLowerCase() == "success")
                 {
-                    var dataLength = data.medsites.length;
+                    var dataLength = data.victims.length;
                     var jData = [];
 
-                    for(var i = 0; i < dataLength; i++){
-                        var medSite = data.medsites[i].Medsite;
-                        var site = {};
-                        site.countryName = data.medsites[i].Country.name;
-                        site.provinceName = data.medsites[i].Province.name;
-                        site.name = medSite.name;
-                        site.locationLat = medSite.locationlat;
-                        site.locationLong = medSite.locationlong;
-                        site.detail = medSite.detail;
-                        site.capacity = medSite.capacity;
-                        site.centerType = medSite.centerType;
+                    var multiplier = (data.page.current - 1 ) * data.page.pageSize;
 
-                        jData.push(site);
+                    for(var i = 0; i < dataLength; i++){
+                        var currentVictim = data.victims[i].Victim;
+                        var victim = {};
+                        victim.idx = i + multiplier; //temporary
+                        victim.id = currentVictim.id;
+                        victim.name = currentVictim.name;
+                        victim.url = currentVictim.picurl;
+                        victim.detail = " ";
+                        victim.lat = currentVictim.locationlat;
+                        victim.lng = currentVictim.locationlng;
+                        victim.gender = service._getGender(currentVictim.gender);
+                        victim.ageGroup = service._getAgeGroup(currentVictim.agegroup);
+                        //victim.place = currentVictim.occurenceplace;
+                        victim.status = service._getStatus(currentVictim.casestatus);
+                        victim.occurrencedate = currentVictim.occurrencedate;
+
+
+                        jData.push(victim);
                     }
 
-                    newDeferred.resolve(jData);
+                    var packt = {data: jData, currentPage:data.page.current, totalPage:data.page.pageCount};
+
+                    newDeferred.resolve(packt);
                 }
                 else
                     newDeferred.reject("Error: " + data);
@@ -112,220 +142,173 @@ appServices.factory('suotinService', [ "$location", "$q" ,"repositoryService","$
             .error(function(data, status, headers, config){
                 newDeferred.reject("Error: " + data);
             });
-*/
 
-        service.timeoutToken = $timeout(function(){
+
+        /*service.timeoutToken = $timeout(function(){
             $timeout.cancel(service.timeoutToken);
             service.timeoutToken = null;
 
-            var victims = [
-                {
-                    idx: 0,
-                    occurenceDate: "12/30/2015"  ,
-                    name: "lopiioa_1",
-                    ageGrp: "young adult",
-                    location: "school",
-                    detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                    status: "open",
-                    gndr: "f",
-                    lat: "7.707134",
-                    lng: "-5.026487"
-                },
-                {
-                    idx: 1,
-                    occurenceDate: "02/15/2015"  ,
-                    name: "etrs_2",
-                    ageGrp: "young adult",
-                    location: "home",
-                    detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                    status: "pending",
-                    gndr: "m",
-                    lat: "7.704519",
-                    lng: "-5.033278"
-                },
-                {
-                    idx: 2,
-                    occurenceDate: "12/05/2015"  ,
-                    name: "lopiioa_3",
-                    ageGrp: "young adult",
-                    location: "school",
-                    detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                    status: "unknown",
-                    gndr: "m",
-                    lat: "7.701255",
-                    lng: "-5.028750"
-                },
-                {
-                    idx: 3,
-                    occurenceDate: "01/30/2015"  ,
-                    name: "etrs_4",
-                    ageGrp: "young adult",
-                    location: "home",
-                    detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                    status: "unresolved",
-                    gndr: "m",
-                    lat: "7.699981",
-                    lng: "-5.039817"
-                },
-                {
-                    idx: 4,
-                    occurenceDate: "02/03/2015"  ,
-                    name: "lopiioa_5",
-                    ageGrp: "young adult",
-                    location: "school",
-                    detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                    status: "pending",
-                    gndr: "f",
-                    lat: "7.685189",
-                    lng: "-5.031336"
-                },
-                {
-                    idx: 5,
-                    occurenceDate: "10/21/2015"  ,
-                    name: "etrs_6",
-                    ageGrp: "young adult",
-                    location: "home",
-                    detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                    status: "open",
-                    gndr: "m",
-                    lat: "7.682957",
-                    lng: "-5.029641"
-                },
-                {
-                    idx: 6,
-                    occurenceDate: "07/10/2015"  ,
-                    name: "lopiioa_7",
-                    ageGrp: "young adult",
-                    location: "school",
-                    detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                    status: "unresolved",
-                    gndr: "f",
-                    lat: "7.683935",
-                    lng: "-5.028332"
-                },
-                {
-                    idx: 7,
-                    occurenceDate: "04/13/2015"  ,
-                    name: "etrs_8",
-                    ageGrp: "young adult",
-                    location: "home",
-                    detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                    status: "pending",
-                    gndr: "f",
-                    lat: "7.683212",
-                    lng: "-5.023043"
-                },
-                {
-                    idx: 8,
-                    occurenceDate: "07/07/2015"  ,
-                    name: "lopiioa_9",
-                    ageGrp: "young adult",
-                    location: "school",
-                    detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                    status: "closed",
-                    gndr: "f",
-                    lat: "7.682818",
-                    lng: "-5.018451"
-                },
-                {
-                    idx: 9,
-                    occurenceDate: "06/10/2015"  ,
-                    name: "etrs_10",
-                    ageGrp: "young adult",
-                    location: "home",
-                    detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                    status: "open",
-                    gndr: "m",
-                    lat: "7.671612",
-                    lng: "-5.016090"
-                },
-                {
-                    idx: 10,
-                    occurenceDate: "11/26/2015"  ,
-                    name: "lopiioa_11",
-                    ageGrp: "young adult",
-                    location: "school",
-                    detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                    status: "pending",
-                    gndr: "m",
-                    lat: "7.680039",
-                    lng: "-5.056994"
-                },
-                {
-                    idx: 11,
-                    occurenceDate: "12/31/2015"  ,
-                    name: "etrs_12",
-                    ageGrp: "young adult",
-                    location: "home",
-                    detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                    status: "unresolved",
-                    gndr: "m",
-                    lat: "7.688630",
-                    lng: "-5.066178"
-                },
-                {
-                    idx: 12,
-                    occurenceDate: "05/20/2015"  ,
-                    name: "lopiioa_13",
-                    ageGrp: "young adult",
-                    location: "school",
-                    detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                    status: "pending",
-                    gndr: "f",
-                    lat: "7.719377",
-                    lng: "-5.057766"
-                },
-                {
-                    idx: 13,
-                    occurenceDate: "03/13/2015"  ,
-                    name: "etrs_14",
-                    ageGrp: "young adult",
-                    location: "home",
-                    detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                    status: "unknown",
-                    gndr: "m",
-                    lat: "7.686971",
-                    lng: "-5.084932"
-                },
-                {
-                    idx: 14,
-                    occurenceDate: "02/06/2015"  ,
-                    name: "lopiioa_15",
-                    ageGrp: "young adult",
-                    location: "school",
-                    detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                    status: "open",
-                    gndr: "f",
-                    lat: "7.672043",
-                    lng: "-5.049055"
-                },
-                {
-                    idx: 15,
-                    occurenceDate: "10/15/2015"  ,
-                    name: "etrs_16",
-                    ageGrp: "young adult",
-                    location: "home",
-                    detail: "bal;k afkl;ajsk asfl;kjaskfja",
-                    status: "unresolved",
-                    gndr: "f",
-                    lat: "7.660043",
-                    lng: "-5.052075"
-                }
-            ];
-
             newDeferred.resolve(victims);
 
-        },5000);
+        },5000);*/
 
         return newDeferred.promise;
     }
 
+    service._getAgeGroup = function(_num, gender){
+
+        switch (_num){
+
+            case "1" :  return (gender == null || gender == undefined)? "an enfant" : (gender == 'f') ? "a little girl" : "a little boy" ;
+                break;
+            case "2" :  return (gender == null || gender == undefined)? " a teenage" : (gender == 'f') ? "a teen aged girl" : "a teen aged boy" ;//(12-18 ans)
+                break;
+            case "4" : return (gender == null || gender == undefined)? "a Jeune Adult" : (gender == 'f') ? "a young woman" : "a young man" ;//(19 - 25 ans)
+                break;
+            case "8": return (gender == null || gender == undefined)? " an Adult" : (gender == 'f') ? " an adult woman" : "an adult man" ;//(26 - 45 ans)
+                break;
+            case "16": return (gender == null || gender == undefined)? " a middle age person" : (gender == 'f') ? " a middle aged woman" : " a middle aged man" ;//(46 - 69 ans)
+                break;
+
+            default : return (gender == null || gender == undefined)? " an elderly person" : (gender == 'f') ? " an old woman" : " an old aged man" ;
+                break;
+
+        }
+
+    };
+
+    service._getStatus = function(_num){
+        switch (parseInt(_num)){
+            case 1: return "open"; break;
+            case 2: return "pending"; break;
+            case 16: return "close"; break;
+            case 4: return"unresolved"; break;
+            default : return"unknown"; break;  //8
+        }
+    };
+
+    service._getGender = function(_num){
+        switch (parseInt(_num)){
+            case 0:
+            case 1: return "m"; break;
+            default : return "f"; break;
+        }
+    };
+
+    service._getCrimeType = function(_num){
+        switch (parseInt(_num)){
+            case 1: return "kidnapped"; break;
+            default: return"murdered"; break; //2
+        }
+    };
+
+    service._getOccurrencePlace = function(_num){
+        switch (_num){
+            case "1": return "Club"; break;
+            case "2": return "Ecole"; break;
+            case "4": return "Marche" ; break;
+            case "8": return "Rue" ;break;
+            case "16": return "Taxi" ; break;
+            case "32": return "Maison" ; break;
+            default: return "other"; break; //32
+        }
+    };
+
+    service.getVictimDetail = function(victimId){
+
+
+        var newDeferred = $q.defer();
+
+        var req ={
+            method: "GET",
+            url: suotin.initialDefaultLocation + "/api/victims/detail/" + victimId,
+            headers: {
+                'Accept': "application/json",
+                'Content-Type': 'application/json'
+            }
+        }
+
+        $http(req)
+            .success(function(data, status, headers, config){
+                if(data != undefined && data.status != undefined && data.status.toLowerCase() == "success")
+                {
+                        var currentVictim = data.victim;
+                        var victim = {};
+                        victim.crimeType = service._getCrimeType(currentVictim.crimetype);
+                        victim.detail = currentVictim.detail;
+
+                    newDeferred.resolve({id: victimId, details: victim});
+                }
+                else
+                    newDeferred.reject("Error: " + data);
+            })
+            .error(function(data, status, headers, config){
+                newDeferred.reject("Error: " + data);
+            });
+        return newDeferred.promise;
+    };
+
+    service.getGallery = function(page){
+
+
+
+        if(angular.isUndefined(page))
+            page =0;
+
+        var newDeferred = $q.defer();
+
+        var req ={
+            method: "GET",
+            url: suotin.initialDefaultLocation + "/api/victims/pics?page=" + page,
+            headers: {
+                'Accept': "application/json"
+            }
+        }
+
+        $http(req)
+            .success(function(data, status, headers, config){
+                if(data != undefined && data.status != undefined && data.status.toLowerCase() == "success")
+                {
+                    var dataLength = data.victims.length;
+                    var jData = [];
+
+                    for(var i = 0; i < dataLength; i++){
+                        var currentVictim = data.victims[i].Victim;
+                        var victim = {};
+                        victim.id = currentVictim.id;
+                        victim.name = currentVictim.name;
+                        //victim.crimeType = currentVictim.crimetype;
+                        victim.imageUrl = currentVictim.picurl;
+                        //victim.detail = " "; //currentVictim.detail;
+                        //victim.lat = currentVictim.locationlat;
+                        //victim.lng = currentVictim.locationlng;
+                        victim.gender = service._getGender(currentVictim.gender);
+                        victim.ageGroup = service._getAgeGroup(currentVictim.agegroup, victim.gender);
+                        victim.place = service._getOccurrencePlace(currentVictim.occurenceplace);
+                        //victim.status = service._getStatus(currentVictim.casestatus);
+                        victim.occurrencedate = currentVictim.occurrencedate;
+
+
+
+                        jData.push(victim);
+                    }
+
+                    var packt = {data: jData, currentPage:data.page.current, totalPage:data.page.pageCount};
+
+                    newDeferred.resolve(packt);
+                }
+                else
+                    newDeferred.reject("Error: " + data);
+            })
+            .error(function(data, status, headers, config){
+                newDeferred.reject("Error: " + data);
+            });
+        return newDeferred.promise;
+    };
+
     service.updateVictim = function(victim){
 
         var defr = $q.defer();
-
-
-
 
         var req ={
             method: "POST",
@@ -335,14 +318,14 @@ appServices.factory('suotinService', [ "$location", "$q" ,"repositoryService","$
                 'Content-Type': 'application/json'
             },
             data:{
-                /*name: newMedCenter.name,
-                 province_id: newMedCenter.provinceId,
-                 country_id: newMedCenter.countryId,
-                 detail: newMedCenter.detail,
-                 capacity: newMedCenter.capacity,
-                 centertype: newMedCenter.centerType,
-                 locationlat: newMedCenter.locationLat,
-                 locationlong: newMedCenter.locationLong*/
+                /*name: victim.name,
+                 province_id: victim.provinceId,
+                 country_id: victim.countryId,
+                 detail: victim.detail,
+                 capacity: victim.capacity,
+                 centertype: victim.centerType,
+                 locationlat: victim.locationLat,
+                 locationlong: victim.locationLong*/
             }
         }
 
@@ -370,7 +353,7 @@ appServices.factory('suotinService', [ "$location", "$q" ,"repositoryService","$
 
 
         return defr.promise;
-    }
+    };
 
 
     return service;

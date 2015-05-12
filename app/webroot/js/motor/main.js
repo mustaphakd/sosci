@@ -71,7 +71,7 @@ var suotin = {
 
         //TODO: if log in cookie is present, then user is logged in
 
-        suotin.initialDefaultLocation = getPathName();
+        suotin.initialDefaultLocation = "/demos/sosci" // getPathName();
 
         if(verge){
             if(verge.viewportW() > 767){ //tablet && desktop
@@ -121,6 +121,10 @@ var suotin = {
             }
         }
 
+        if(Cookies.enabled){
+            Cookies.expire('uploading');
+        }
+
     },
     reInit:function(){
         this.init();
@@ -139,70 +143,9 @@ var suotin = {
         signIn: function(providerName, callbck){
             if((providerName != undefined) && (providerName != null) && (providerName != ""))
             {
-                var authPath = window.location.origin + suotin.initialDefaultLocation + suotin.security.authEndpoint + providerName;
-                // window location base path href
-                    // append auth/providerName
-                //launch poop wind with url
-                var wdth = 560;
-                var hght = 650;
-                var top = 0; //default and suited for mobile
-                var lft = 0; //default and suited for mobile
-                if(suotin.flags.mobile == suotin.currentViewportClient)
-                {
-                    if(verge.viewportW() < wdth )
-                        wdth = verge.viewportW();
-                    if(verge.viewportH() < hght)
-                        hght = verge.viewportH();
-
-                }
-                else
-                {
-                    top = "5%";
-                    lft = "15%";
-
-                }
-                // set wide mask on actual widown to disable further interaction from user if popup actually does get displayed
-                //blank makes sure it is a window and not tab
 
                 localStorage.removeItem("securityTokenAuthDone");
-                suotin.openWin = window.open(authPath, '_blank', "directories=no,height="+ hght +",width="+ wdth +",menubar=no,resizable=no,titlebar=no,top=" + top +",left="+ lft +",location=no,modal=yes,alwaysRaised=yes,dialog=true"); //scrollbars=no,status=no,
-
-                var pollTimer = null;
-
-                /*window.setTimeout(function() {
-                    openWin.onclose = suotin.security.funcLoginWinClosed;
-                }, 2000);*/
-
-
-/*
-                window.setTimeout(function(){
-                    if(_hasPopupBlocker(openWin))
-                    {
-                        alert("Please, enable pop ups for your browsers to use third parties authentication providers");
-                        return;
-                    }
-
-                    pollTimer = window.setInterval(function() {
-                        if (openWin.isClosed != false) { // !== is required for compatibility with Opera
-
-                        }
-                        else
-                        {
-                            window.clearInterval(pollTimer);
-                            // on close Evt
-                            //check sessionStorage.securityToken existence
-                            //if ys. set _loggin to true
-                            //call callback
-                            openWin = null;
-                            callbck();
-                        }
-                    }, 200);
-                }, 5000);
-
-*/
-
-
-
+                suotin.security.SecuredPopup(suotin.security.authEndpoint + providerName, false);
 
                 this.authCompleteIntervalToken = window.setInterval(function(){
 
@@ -214,12 +157,8 @@ var suotin = {
                     {
                         window.clearInterval(suotin.security.authCompleteIntervalToken);
                         suotin.security.authCompleteIntervalToken = null;
-                        //debugger;
-                        //suotin.openWin.focus();
-                        //suotin.openWin.close(true);
 
                         suotin.openWin = null;
-                        //callbck();
                         suotin.security.authCompletedHandler();
                     }
 
@@ -380,9 +319,6 @@ var suotin = {
             }
         },
         authEndpoint: "/auth/",
-        funcLoginWinClosed: function(evt){
-            alert("closed");
-        },
         authCompletedHandler: function(evt){
             var secuTok = JSON.parse(localStorage.securityToken);
             localStorage.removeItem("securityToken");
@@ -394,7 +330,46 @@ var suotin = {
 
             }
         },
-        authCompleteIntervalToken: null
+        authCompleteIntervalToken: null,
+        SecuredPopup: function(endpointPath, isAbsolute){
+
+            var authPath = null;
+            if(isAbsolute == 'undefined' || isAbsolute == null || isAbsolute == false){
+                authPath = window.location.origin + suotin.initialDefaultLocation + endpointPath
+            }
+            else
+            {
+                authPath = endpointPath;
+            }
+
+
+            // window location base path href
+            // append auth/providerName
+            //launch poop wind with url
+            var wdth = 560;
+            var hght = 650;
+            var top = 0; //default and suited for mobile
+            var lft = 0; //default and suited for mobile
+            if(suotin.flags.mobile == suotin.currentViewportClient)
+            {
+                if(verge.viewportW() < wdth )
+                    wdth = verge.viewportW();
+                if(verge.viewportH() < hght)
+                    hght = verge.viewportH();
+
+            }
+            else
+            {
+                top = "5%";
+                lft = "15%";
+
+            }
+            // set wide mask on actual widown to disable further interaction from user if popup actually does get displayed
+            //blank makes sure it is a window and not tab
+
+            suotin.openWin = window.open(authPath, '_blank', "directories=no,height="+ hght +",width="+ wdth +",toolbar=no,menubar=no,resizable=no,titlebar=no,top=" + top +",left="+ lft +",location=no,alwaysRaised=yes"); //,dialog=truemodal=yes,scrollbars=no,status=no,
+
+        }
     },
     loaderVM: {
         showMainLoader: function(){
@@ -430,6 +405,49 @@ var suotin = {
         closeLoaderMessage:function(){
             if(this.mainLoader != null) {
                 this.mainLoader.hide("slow");
+            }
+        },
+        showDialog: function(title, innerHTML){
+            var node = this.mainLoader.find(".notifier");
+            if(node != null && node != undefined && !node.hasClass("hide"))
+                node.addClass("hide");
+
+            $('#dlgMssge').removeClass('hide');
+
+            $('.titleGrid').text(title);
+
+            $('#messageBoxContent')[0].innerHTML = innerHTML;
+            this.showMainLoader();
+
+
+        },
+        hideDialog: function(){
+
+            if(this.mainLoader != null) {
+                this.mainLoader.hide();
+            }
+
+            this.mainLoader.find(".notifier").removeClass("hide");
+            $('#dlgMssge').addClass('hide');
+
+            $('.titleGrid').text('');
+        },
+        updateDialog: function(selector, htmlContent){
+
+            var dialog = $('#dlgMssge');
+
+            if(this.mainLoader != null && ! dialog.hasClass("hide") ) {
+
+                dialog.find(selector).html(htmlContent);
+            }
+        },
+        appendToDialog: function(selector, textContent){
+
+            var dialog = $('#dlgMssge');
+
+            if(this.mainLoader != null && ! dialog.hasClass("hide") ) {
+
+                dialog.find(selector).append(textContent);
             }
         },
         mainLoader: null,
@@ -483,7 +501,8 @@ var suotin = {
     storePreviousLocation: true,
     previousLocation: null,
     currentLocation:null,
-    initialDefaultLocation:""
+    initialDefaultLocation:"",
+    appData:{}
 };
 
 function resolveController($q, $timeout, controllerName){

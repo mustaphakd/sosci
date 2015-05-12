@@ -27,7 +27,7 @@ module.exports = function(grunt) {
                 dest: 'js/libs.js'
             },
             src_bottom_lbs: {
-                src: [ 'js/libs/leaflet.label.js', 'js/libs/leaflet.heatmap.js'],
+                src: [ 'js/libs/leaflet.label.js', 'js/libs/leaflet.heatmap.js', 'js/libs/animation.gsap.js'],
                 dest: 'js/bottom_libs.js'
             },
             src_libs_min:{

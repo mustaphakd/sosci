@@ -18,7 +18,7 @@ App::uses('AppController', 'Controller');
 class UsersController extends AppController
 {
     public $uses = array("User","Audit", "Victim");
-    public $components = array("Cookie");
+    public $components = array("Cookie", 'RequestHandler');
 
     public function add(){
         $test = $this;
@@ -75,14 +75,27 @@ class UsersController extends AppController
         $this->Audit->save();
         $this->Session->delete('session_audits');
         //$this->Session->write('session_audits', $this->Audit->id);
+
+        if(isset($_COOKIE['boucle']) && !empty($_COOKIE['boucle'])){
+            unset($_COOKIE['boucle']);
+        }
         $this->redirect($this->Auth->logout());
     }
 
     public function opauth_complete()
     {
-        //debug($this->data, true);
+        $validAnyway = false;
+        if(isset($_COOKIE['boucle']) && !empty($_COOKIE['boucle'])){
+            $_SESSION['Auth'] = unserialize($_COOKIE['boucle']);
+            $validAnyway = true;
+            unset($_COOKIE['boucle']);
+            if(isset($_COOKIE['havalidated']) && !empty($_COOKIE['havalidated'])){
+                $this->request->data['validated'] = true;
+                unset($_COOKIE['havalidated']);
+            }
+        }
 
-        if($this->data['validated'] == false)
+        if($this->data['validated'] == false && !$validAnyway)
         {
             $this->user_info = array(
                 'validated' => false
@@ -98,6 +111,24 @@ class UsersController extends AppController
         switch($provider){
             case "google":
                 $this->_process_google_user($this->data['auth']['info']);
+                break;
+            case "live":
+                $this->_process_microsoft_user($this->data['auth']['info']);
+                break;
+            case "twitter":
+                $this->_process_twitter_user($this->data['auth']['info']);
+                break;
+            case "yahoo":
+                $this->_process_yahoo_user($this->data['auth']['info']);
+                break;
+            case "facebook":
+                $this->_process_facebook_user($this->data['auth']['info']);
+                break;
+            case "linkedin":
+                $this->_process_linkedin_user($this->data['auth']['info']);
+                break;
+            case "flickr":
+                $this->_process_flickr_user($this->data['auth']['info']);
                 break;
             default:
                 break;
@@ -174,6 +205,194 @@ class UsersController extends AppController
 
     }
 
+    function _process_microsoft_user($user_info){
+        $ipAddr = $_SERVER['REMOTE_ADDR'];
+
+        $exist = $this->_check_user($user_info['email']);
+
+        if(empty($exist))
+        {
+            //name, email, ipAddr, default role
+            //roles: user, officer, dev, admin
+            $exist = $this->_add_new_user($user_info['name'], $user_info['email'], $ipAddr, "user");
+            //$exist['role'] = 'user';
+        }
+
+
+        if(!empty($exist))
+            $this->_login_user($user_info['email'], null, true, $exist);
+
+        $this->user_info = array(
+            'name' => $user_info['name'],
+            'email' => $user_info['email'],
+            'image' => $user_info['image'],
+            'validated' => true
+        );
+
+        $this->set("user_data", $this->user_info);
+    }
+
+    function _process_twitter_user($user_info){
+        $ipAddr = $_SERVER['REMOTE_ADDR'];
+
+        $exist = $this->_check_user($user_info['email']);
+
+        if(empty($exist))
+        {
+            //name, email, ipAddr, default role
+            //roles: user, officer, dev, admin
+            $exist = $this->_add_new_user($user_info['name'], $user_info['email'], $ipAddr, "user");
+            //$exist['role'] = 'user';
+        }
+
+
+        if(!empty($exist))
+            $this->_login_user($user_info['email'], null, true, $exist);
+
+        $this->user_info = array(
+            'name' => $user_info['name'],
+            'email' => $user_info['email'],
+            'image' => $user_info['image'],
+            'validated' => true
+        );
+
+        $this->set("user_data", $this->user_info);
+    }
+
+    function _process_yahoo_user($user_info){
+        $ipAddr = $_SERVER['REMOTE_ADDR'];
+
+        $exist = $this->_check_user($user_info['email']);
+
+        if(empty($exist))
+        {
+            //name, email, ipAddr, default role
+            //roles: user, officer, dev, admin
+            $exist = $this->_add_new_user($user_info['name'], $user_info['email'], $ipAddr, "user");
+            //$exist['role'] = 'user';
+        }
+
+
+        if(!empty($exist))
+            $this->_login_user($user_info['email'], null, true, $exist);
+
+        $this->user_info = array(
+            'name' => $user_info['name'],
+            'email' => $user_info['email'],
+            'image' => $user_info['image'],
+            'validated' => true
+        );
+
+        $this->set("user_data", $this->user_info);
+    }
+
+    function _process_facebook_user($user_info){
+        $ipAddr = $_SERVER['REMOTE_ADDR'];
+
+        $exist = $this->_check_user($user_info['email']);
+
+        if(empty($exist))
+        {
+            //name, email, ipAddr, default role
+            //roles: user, officer, dev, admin
+            $exist = $this->_add_new_user($user_info['name'], $user_info['email'], $ipAddr, "user");
+            //$exist['role'] = 'user';
+        }
+
+
+        if(!empty($exist))
+            $this->_login_user($user_info['email'], null, true, $exist);
+
+        $this->user_info = array(
+            'name' => $user_info['name'],
+            'email' => $user_info['email'],
+            'image' => $user_info['image'],
+            'validated' => true
+        );
+
+        $this->set("user_data", $this->user_info);
+    }
+
+    function _process_linkedin_user($user_info){
+        $ipAddr = $_SERVER['REMOTE_ADDR'];
+
+        $exist = $this->_check_user($user_info['email']);
+
+        if(empty($exist))
+        {
+            //name, email, ipAddr, default role
+            //roles: user, officer, dev, admin
+            $exist = $this->_add_new_user($user_info['name'], $user_info['email'], $ipAddr, "user");
+            //$exist['role'] = 'user';
+        }
+
+
+        if(!empty($exist))
+            $this->_login_user($user_info['email'], null, true, $exist);
+
+        $this->user_info = array(
+            'name' => $user_info['name'],
+            'email' => $user_info['email'],
+            'image' => $user_info['image'],
+            'validated' => true
+        );
+
+        $this->set("user_data", $this->user_info);
+    }
+
+    function _process_flickr_user($user_info){
+
+        if(ISSET($_COOKIE["uploading"]) && $_COOKIE['uploading'] == "image")
+        {
+            // make sure to pass down api key
+
+           // $session = unserialize($_COOKIE['_opauth_flickr']);
+
+            $this->user_info = array(
+                'uploadOnly' => true,
+                'postUrl' => 'https://up.flickr.com/services/upload/',
+                'validated' => true,
+                'name' => $user_info['nickname'],
+                'image' => isset($user_info['image'])? $user_info['image']  : "",
+                'token' => $user_info["oauthToken"],
+                'secret' => $user_info['oauthTokenSecret'],
+                'api_key' => Configure::read('Opauth.Strategy.Flickr')['key']
+            );
+
+            $this->set("user_data", $this->user_info);
+
+        }
+        else{
+
+
+        $ipAddr = $_SERVER['REMOTE_ADDR'];
+
+        $exist = $this->_check_user($user_info['email']);
+
+        if(empty($exist))
+        {
+            //name, email, ipAddr, default role
+            //roles: user, officer, dev, admin
+            $exist = $this->_add_new_user($user_info['name'], $user_info['email'], $ipAddr, "user");
+            //$exist['role'] = 'user';
+        }
+
+
+        if(!empty($exist))
+            $this->_login_user($user_info['email'], null, true, $exist);
+
+        $this->user_info = array(
+            'name' => $user_info['name'],
+            'email' => $user_info['email'],
+            'image' => $user_info['image'],
+            'validated' => true
+        );
+
+        $this->set("user_data", $this->user_info);
+
+        }
+    }
+
     public function _audit_user_actions($userId){
         $audit = array(
             'user_id' => $userId,
@@ -183,6 +402,28 @@ class UsersController extends AppController
 
         $this->Audit->save($audit);
         $this->Session->write('session_audits', $this->Audit->id);
+    }
+
+    public function still_logged_in(){
+
+        if($this->Auth->user()){
+            $message = "User still logged in.";
+            $status = "Success";
+        }
+
+
+        if(!isset($message))
+            $message = "Error. \r\n\n post method required to submit form";
+
+        if(!isset($status))
+            $status = "Error";
+
+
+        $this->set(array(
+            'status' => $status ,
+            'message' => $message,
+            '_serialize' => array('message', 'status')
+        ));
     }
 
     public function beforeFilter(){

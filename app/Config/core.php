@@ -218,7 +218,6 @@
 	Configure::write('Session', array(
 		'defaults' => 'php'
 	));
-
 /**
 /**
  * A random string used in security hashing methods.

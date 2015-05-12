@@ -36,6 +36,19 @@
 Router::connect('/opauth-complete/*', array('controller' => 'users', 'action' => 'opauth_complete'));
 
 
+Router::connect('/api/:controller/:action/*', array());
+
+/*
+ * mapresources for RESTFULL requests
+ */
+
+Router::mapResources('uploads');
+Router::mapResources('victims');
+
+
+Router::parseExtensions('json');
+
+
 /**
  * Load all plugin routes. See the CakePlugin documentation on
  * how to customize the loading of plugin routes.

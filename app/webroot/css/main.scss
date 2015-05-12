@@ -43,8 +43,10 @@ body, html{
 
 .galleryItemTitle{
   font-family: $textFont3;
-  font-size: 1.005em;
+  font-size: 26px;
   color: white;
+  text-decoration: none;
+
 }
 .regularText{
   font-family: $textFont2;
@@ -434,6 +436,10 @@ i.selected{
 
   border: 3px solid #3498db;
   z-index: 1500;
+
+  @include media("<tablet")  {
+    left: 03%;
+  }
 }
 #loader:before {
   content: "";
@@ -516,6 +522,10 @@ i.selected{
   text-align: center;
   font-size: 18px;
   text-shadow: 0px 1px 1px rgba(250, 150, 150, 1);
+
+  @include media("<tablet"){
+    left: 1%;
+  }
 }
 
 #loader-wrapper .notifier .notifierContent{
@@ -524,6 +534,32 @@ i.selected{
 
 .makeTransparent{
   background-color: rgba(35, 36, 30, 0.47)!important;
+}
+
+@keyframes dataLoaderSpinner {
+  0%   {
+    transform: rotate(0deg);  /* Firefox 16+, IE 10+, Opera */
+  }
+  100% {
+    transform: rotate(359deg);  /* Firefox 16+, IE 10+, Opera */
+  }
+}
+
+.dataLoader{
+  border-top-style: solid;
+  border-left-style: solid;
+  border-radius: 50px;
+  border-color: linear-gradient(to right, rgba(34,161,27,1) 0%, rgba(66,230,40,.1) 100%);;
+
+  margin-top: 20%;
+  margin-left: 20%;
+
+  width: 80px;
+  height: 80px;
+
+
+
+  animation: dataLoaderSpinner 1.5s linear infinite;
 }
 /*****************************Homw View****************************************/
 .leaflet-control-scrollerContainer{
@@ -957,6 +993,40 @@ span.fmlGndr:before{
 }
 input[type='radio']:focus+label{color:#C30}
 
+.sauveLeafletPopup .leaflet-popup-content-wrapper{
+  background-color: transparent!important;
+  color: #000000!important;
+
+}
+
+.sauveLeafletPopup {
+//width: 350px!important;
+ // height: 100px!important;
+ // overflow: hidden!important;
+}
+
+.sauveLeafletPopup .leaflet-popup-content-wrapper, .leaflet-popup-tip{
+  background-color: transparent!important;
+}
+
+.sauveLeafletPopup .popOverlay
+{
+  width: 100%;
+  background-color: rgba(223, 223, 223, 1);
+  line-height: 25px;
+  margin-top: 5px;
+  margin-bottom: -10px;
+}
+
+.sauveLeafletPopup .poopImgHost {
+  width: 300px!important;
+  height: 150px!important;
+  overflow: hidden!important;
+
+}
+
+
+
 /********************************AppFramework related**********************/
 
 .pages{
@@ -1035,6 +1105,12 @@ input[type='radio']:focus+label{color:#C30}
   font-weight: bold!important;
   font-size: 25px!important;
 }
+
+div[date-picker-wrapper] table, [date-picker] table {
+  @include media("<tablet"){
+    margin-left: 50px!important;
+  }
+}
 /**********************************************Form Validation************************/
 .ng-invalid, .makeInvalid{
   border-color: #ff0000!important;
@@ -1093,3 +1169,199 @@ table{
   color: #000000!important;
 }
 */
+
+div#dlgMssge{
+
+}
+
+div#dlgMssge .messageBox{
+  background-color: white;
+  padding-top: 0%;
+}
+
+div#dlgMssge .messageBox .titleGrid{
+  color: #000000;
+  font-size: 30px;
+  margin-bottom: 1%;
+  margin-top: 1%;
+  text-align: center;
+  vertical-align: middle;
+  width: 100%;
+  font-weight: 500;
+}
+
+div#dlgMssge .messageBox .messageContent{
+  color: #000000;
+  font-size: 26px;
+  margin-bottom: 2%;
+}
+
+div#dlgMssge .messageBox .btnGrid{
+  width: 100%;
+
+}
+
+div#dlgMssge .messageBox .btnGrid .btnGreen{
+  float: none;
+  font-size: 4px;
+
+}
+div#dlgMssge .messageBox .messageContent .textScrollingContent{
+  overflow-y: auto;
+  max-height: 150px;
+
+}
+
+div#dlgMssge .messageBox .messageContent .textScrollingContent p{
+ text-align: justify;
+}
+
+.picsdetailGender{
+  font-size: 60px;
+}
+
+.picsDate{
+  white-space: nowrap;
+
+  @include media("<=346px") {
+    width: 129px;
+    overflow: hidden;
+  }
+}
+/*******************************************Gallery*****************************************/
+.grid-sizer{}
+.hover-target{
+  display: inline-block;
+  width: 100%;
+}
+.hover-target:hover .thumb .meta{
+  background: rgba(0,0,0,.7);
+  opacity: .80;
+}
+.thumb{
+  display: inline-block;
+  position: relative;
+  //line-height: 0;
+  width: 100%;
+}
+.photo_container{
+  width: 100%;
+  display: inline-block;
+  /*line-height: 0;*/
+  position: relative;
+}
+.play{
+
+}
+.meta{
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 5px 10px 5px;
+  background: #000;
+  background: rgba(0,0,0,0);
+  opacity: .00;
+  /*-ms-filter: "alpha(opacity=0)";*/
+  color: #fff;
+  font-size: 11px;
+  line-height: 1.3;
+  margin-top: 5px;
+  text-align: left;
+  text-shadow: 1px 1px 0 black;
+  overflow: hidden;
+  /*-webkit-transition: all .15s ease-in-out;
+  -moz-transition: all .15s ease-in-out;
+  -o-transition: all .15s ease-in-out;*/
+  transition: all .15s ease-in-out;
+}
+.picTitle{
+  display: inline-block;
+  //max-width: 200px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin: 0;
+ cursor: pointer;
+  max-width: 130px;
+
+}
+.attribution{
+  width: 100%;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  display: inline-block;
+}
+.attribution-block{
+  position: relative;
+  margin-right: 0;
+  white-space: normal;
+  width: inherit;
+  display: inline;
+}
+.inline-icons{
+ /* margin-left: 0;
+  margin-top: 2px;*/
+  position: absolute;
+  right: 10px;
+  /*bottom: 4px;
+  top: auto;
+  display: block;
+  height: 20px;*/
+  width: auto;
+  overflow: visible;
+  z-index: 500;
+ /* margin-bottom: 5%;*/
+}
+
+/****************************masonry********************************************************/
+
+.masonry {
+  //background: #EEE;
+  max-width: 100%;
+  display: inline-block!important;
+}
+
+.masonry *{
+  box-sizing: border-box;
+}
+
+/* clearfix */
+.masonry:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+ div.item {
+  max-width:  180px;
+  max-height: 180px;
+  float: left;
+  background: #D26;
+  border: 2px solid ;
+  border-color: white;
+  border-radius: 5px;
+   overflow: hidden;
+}
+
+ img.item {
+   max-width: 100%; // 200px;
+   min-height: 180px;
+   max-height: 180px;
+ }
+
+.item.w2 { max-width:  360px; width:  360px;}
+.item.w3 { width:  540px; max-width:  540px; }
+.item.w4 { width:  270px; max-width:  270px; }
+
+.item.h2 { height: 300px; max-height: 300px; }
+.item.h3 { height: 360px; max-height: 360px;}
+/*.item.h4 { height: 540px; max-height: 540px;}*/
+.item.h4 { height: 240px; max-height: 250px;}
+
+button {
+  font-size: 20px;
+}
+
+/**************************/

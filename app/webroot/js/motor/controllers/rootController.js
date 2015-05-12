@@ -1,8 +1,8 @@
 var appControllers = angular.module('appControllers', []);
 //'securityService','$modal',
 
-appControllers.controller('mainAppController',['$scope','$route', '$location','$rootScope', '$templateCache', '$controller', '$compile','suotinService',
-    function($scope, $route, $location, $rootScope, $templateCache, $controller, $compile, suotinService){
+appControllers.controller('mainAppController',['$scope','$route', '$location','$rootScope', '$templateCache', '$controller', '$compile','suotinService','$interval',
+    function($scope, $route, $location, $rootScope, $templateCache, $controller, $compile, suotinService, $interval){
 
         $scope.$root = $rootScope;
         $scope.services = suotinService;
@@ -12,6 +12,7 @@ appControllers.controller('mainAppController',['$scope','$route', '$location','$
         appSuotin.lazyLoader.compile = $compile;
         appSuotin.lazyLoader.route = $route;
         appSuotin.lazyLoader.location = $location;
+        appSuotin.lazyLoader.interval = $interval;
 
         /***** Notication structs****/
         $scope.NotificationMessage = "zbonjopr";
@@ -41,42 +42,7 @@ appControllers.controller('mainAppController',['$scope','$route', '$location','$
         $scope.showModal = function(title, content, hasTitle, showCloseButton){
             //debugger;
 
-            hasTitle = (typeof hasTitle === "undefined") ? true : hasTitle;
-            if(hasTitle)
-            {
-                $scope.modalTitle = title;
-                $scope.modalContent = content;
-            }
-            else{
-                $scope.modalContent = content;
-            }
 
-            showCloseButton = (typeof showCloseButton === "undefined") ? true : showCloseButton;
-
-            var $modalInstance = $modal.open({
-                templateUrl: 'views/modalTpl.html',
-                //controller: 'ModalInstanceCtrl',
-                scope: $scope
-                /* resolve: {
-                 modalTitle: function () {
-                 return $scope.modalTitle;
-                 },
-                 modalContent: function () {
-                 return $scope.modalContent;
-                 },
-                 hasModalTitle: function () {
-                 return $scope.hasModalTitle;
-                 }
-                 }*/
-            });
-
-            $scope.ok = function () {
-                $modalInstance.close();
-            };
-
-            $scope.cancel = function () {
-                $modalInstance.dismiss('cancel');
-            };
         }
 
         $scope.showSaveModal = function(title, content, hasTitle, showCloseButton){
@@ -121,9 +87,15 @@ appControllers.controller('mainAppController',['$scope','$route', '$location','$
             $scope.showModal("", msg, false, false);
         }
 
+        $scope.closeDialog = function(){
+            suotin.loaderVM.hideDialog();
+        };
+
         //debugger;
         $scope.$root.$on('$routeChangeStart', function(scope, next, current){
             //console.log('Changing from '+angular.toJson(current)+' to '+angular.toJson(next));
+
+            $scope.clearAllListeners();
             if (typeof(current) !== 'undefined'){
                 $templateCache.remove(current.templateUrl);
                 $templateCache.remove(current.loadedTemplateUrl);
@@ -177,15 +149,37 @@ appControllers.controller('mainAppController',['$scope','$route', '$location','$
 
         }
 
+        $scope.clearAllListeners = function(){
+            if(suotin.security.authCompleteIntervalToken != null)
+            {
+                window.clearInterval(suotin.security.authCompleteIntervalToken);
+                suotin.security.authCompleteIntervalToken = null;
+            }
+            if(Cookies.enabled){
+                Cookies.expire('uploading');
+            }
+
+        };
+
         /************************Services and behaviors*******************************************/
 
-        $scope.getVictims = function(){
+        $scope.getVictims = function(page){
             //debugger;
-            return $scope.services.getVictims();
+            return $scope.services.getVictims(page);
+        };
+
+        $scope.getGallery = function(page){
+            //debugger;
+            return $scope.services.getGallery(page);
         };
 
         $scope.addNewVictim = function(newVictim){
             return $scope.services.addNewVictim(newVictim);
+        };
+
+        $scope.getVictimDetail = function(victimId){
+            //debugger;
+            return $scope.services.getVictimDetail(victimId);
         };
 
 

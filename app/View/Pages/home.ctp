@@ -58,7 +58,7 @@
                         <li><a class="tooltip" data-tooltip="dashboard" href="dashbrd"><i class="fa fa-tachometer fa-lg"></i></a></li>
                         <li style="display: none"><a class="tooltip" data-tooltip="validate cases"><i class="fa fa-gavel fa-lg"></i></a></li>
 
-                        <!--Logged in as < ? = //AuthComponent::user('name')
+                        <!--Logged in as < ? = //AuthComponent::user('role') == "admin"
                         ?> -->
                     <?php } ?>
                          </ul>
@@ -76,7 +76,7 @@
                             <a class="tooltip" data-tooltip="Google" data-auth="google"><i class="fa fa-google-plus"></i></a>
                             <a class="tooltip" data-tooltip="Twitter" data-auth="twitter"><i class="fa fa-twitter"></i></a>
                             <a class="tooltip" data-tooltip="Yahoo!" data-auth="yahoo"><i class="fa fa-yahoo"></i></a>
-                            <a class="tooltip" data-tooltip="Microsoft" data-auth="microsoft" ><i class="fa fa-windows"></i></a>
+                            <a class="tooltip" data-tooltip="Microsoft" data-auth="live" ><i class="fa fa-windows"></i></a>
                         </div>
                     </div>
 
@@ -102,7 +102,7 @@
                         <li data-auth="google"><a class="tooltip" data-tooltip="Google"><i class="fa fa-google-plus fa-lg"></i></a></li>
                         <li data-auth="twitter"><a class="tooltip" data-tooltip="Twitter"><i class="fa fa-twitter fa-lg"></i></a></li>
                         <li data-auth="yahoo"><a class="tooltip" data-tooltip="Yahoo!"><i class="fa fa-yahoo fa-lg"></i></a></li>
-                        <li data-auth="microsoft" ><a class="tooltip" data-tooltip="Microsoft"><i class="fa fa-windows fa-lg"></i></a></li>
+                        <li data-auth="microsoft" ><a class="tooltip" data-tooltip="live"><i class="fa fa-windows fa-lg"></i></a></li>
                     </ul>
                 </div>
             </div>
@@ -139,6 +139,22 @@
         <i class="fa fa-spinner fa-pulse fa-3x"></i>
         <span class="notifierContent"></span>
     </div>
+
+    <div class="dialog hide" id="dlgMssge" >
+
+        <div class="messageBox bottomSpacer">
+
+            <div class="titleGrid"></div>
+
+            <div class=" galleryItemText messageContent" id="messageBoxContent">
+
+            </div>
+            <div class="btnGrid">
+                <div class=" btnGreen" ng-click="closeDialog()"><a class=" fa  fa-5x">Close</a></div>
+            </div>
+        </div>
+
+    </div>
 </div>
 
 <script type="text/javascript"  src="js/libs.min.js"></script>
@@ -154,9 +170,19 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.3.13/angular-route.min.js" type="text/javascript"></script>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/leaflet.markercluster.js" type="text/javascript"></script>
+<script src="js/libs/cookies.min.js" type="text/javascript"></script>
 
+<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/latest/plugins/CSSPlugin.min.js"></script>
+<script src="http://cdnjs.cloudflare.com/ajax/libs/gsap/1.16.1/TweenLite.min.js"></script>
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.3/ScrollMagic.min.js"></script>
 <script type="text/javascript"  src="js/bottom_libs.min.js"></script>
 
 <script src="js/libs/index.min.js" type="text/javascript"></script>
+
+
+
+
+
 <script src="js/motor/main.js" type="text/javascript"></script>
 

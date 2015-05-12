@@ -139,3 +139,28 @@ Configure::write('Opauth.Strategy.Google', array(
     'client_id' => '389884523687-jsnm60fmagp287e09pha64fntka6dvcv.apps.googleusercontent.com',
     'client_secret' => 'iUCQEajrACK6VYCajjO2AkFL'
 ));
+
+Configure::write('Opauth.Strategy.Twitter', array(
+    'key' => 'YOUR CONSUMER KEY',
+    'secret' => 'YOUR CONSUMER SECRET'
+));
+
+Configure::write('Opauth.Strategy.Live',  array(
+    'client_id' => '000000004414931B',
+    'client_secret' => '-HNSeRjx9R5L44yFT6qzmzLabKFzSRrK'
+));
+
+Configure::write('Opauth.Strategy.LinkedIn', array(
+    'api_key' => '78deu78isbz52t',
+    'secret_key' => 'nX8WEUmXVBw2Let5'
+));
+
+Configure::write('Opauth.Strategy.Flickr', array(
+    'key' => 'c522698863b0ccd469d5e8115f5ce32b',
+    'secret' => '7aab5a46d3e05eaf' //****
+));
+/*
+Configure::write('Opauth.Strategy.Yahoo',  array(
+    'client_id' => '000000004414931B',
+    'client_secret' => '-HNSeRjx9R5L44yFT6qzmzLabKFzSRrK'
+));*/
