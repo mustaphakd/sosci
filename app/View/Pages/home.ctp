@@ -16,13 +16,17 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/0.4.0/MarkerCluster.css" />
     <link href="css/leaflet.label.css" rel="stylesheet" type="text/css" media="all" />
 
+    <link href="css/dc.css" rel="stylesheet" type="text/css" media="all" />
     <link href="css/af.ui.css" rel="stylesheet" type="text/css" media="all" />
     <link href="css/index.min.css" rel="stylesheet" type="text/css" media="all" />
     <link href="css/main.css" rel="stylesheet" type="text/css" media="all" />
     <!--
         <script type="text/javascript" async="true" src="js/libs/jquery-2.1.3.min.js"></script>manifest="cache_1_00_1.appcache"
         <script type="text/javascript" async="true" src="js/libs/verge.js"></script>
-        <script type="text/javascript" async="true" src="js/libs.min.js"></script>-->
+        <script type="text/javascript" async="true" src="js/libs.min.js"></script>
+
+        http://cdnjs.buttflare.com/ajax/libs/dc/1.7.0/dc.css
+        -->
 
     <?php $this->end(); ?>
 
@@ -49,7 +53,7 @@
             <div class="topMenu">
                 <ul>
                     <li><a class="tooltip" data-tooltip="map view" href=" "><i class="fa fa-map-marker fa-lg"></i></a></li>
-                    <li ><a class="tooltip" data-tooltip="data visualization"><i class="fa fa-bar-chart fa-lg"></i></a></li>
+                    <li ><a class="tooltip" data-tooltip="data visualization" href="dataviz"><i class="fa fa-bar-chart fa-lg"></i></a></li>
 
                     <li><a class="tooltip" data-tooltip="details" href="ourpeople"><i class="fa fa-picture-o fa-lg"></i></a></li>
                     <?php if(AuthComponent::user('id')){ ?>
@@ -178,6 +182,7 @@
 <script src="//cdnjs.cloudflare.com/ajax/libs/ScrollMagic/2.0.3/ScrollMagic.min.js"></script>
 <script type="text/javascript"  src="js/bottom_libs.min.js"></script>
 
+    <!-- date pckr -->
 <script src="js/libs/index.min.js" type="text/javascript"></script>
 
 

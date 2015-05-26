@@ -31,7 +31,7 @@ module.exports = function(grunt) {
                 dest: 'js/bottom_libs.js'
             },
             src_libs_min:{
-                src:['js/libs_pre.min.js', 'js/libs/appframework.ui.min.js'],
+                src:['js/libs_pre.min.js', 'js/libs/appframework.ui.js'],
                 dest:'js/libs.min.js'
             },
             src_msnry_imgLoaded:{

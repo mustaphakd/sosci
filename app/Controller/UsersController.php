@@ -406,25 +406,29 @@ class UsersController extends AppController
 
     public function still_logged_in(){
 
+
+
         if($this->Auth->user()){
             $message = "User still logged in.";
             $status = "Success";
+            $loggedIn = true;
         }
-
-
-        if(!isset($message))
-            $message = "Error. \r\n\n post method required to submit form";
-
-        if(!isset($status))
-            $status = "Error";
+        else{
+            $message = "User logged off.";
+            $status = "Success";
+            $loggedIn = false;
+        }
 
 
         $this->set(array(
             'status' => $status ,
             'message' => $message,
-            '_serialize' => array('message', 'status')
+            'loggedin' => $loggedIn,
+            '_serialize' => array('message', 'status', 'loggedin')
         ));
     }
+
+
 
     public function beforeFilter(){
 

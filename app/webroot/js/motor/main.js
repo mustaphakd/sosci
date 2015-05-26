@@ -287,6 +287,7 @@ var suotin = {
                         $("#userPic").attr("src",securityToken.image );
 
                     }
+
                 }
             }
             switch (viewPortClient)

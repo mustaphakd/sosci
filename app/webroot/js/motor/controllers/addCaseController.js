@@ -215,7 +215,7 @@ appSuotin.addcase.controller = function($scope){
             localStorage.removeItem("ImageLocatorDone");
         }
     );
-
+    suotin.loaderVM.closeLoaderMessage();
 }
 
 jQuery(function($){

@@ -1111,6 +1111,10 @@ div[date-picker-wrapper] table, [date-picker] table {
     margin-left: 50px!important;
   }
 }
+
+a.backButton.back{
+  cursor: pointer;
+}
 /**********************************************Form Validation************************/
 .ng-invalid, .makeInvalid{
   border-color: #ff0000!important;
@@ -1372,4 +1376,46 @@ button {
   width: 0 !important;
 }
 
-/**************************/
+/******************DataViz  ********/
+.vizAreayearly{
+  background-color: #aecc38;
+  width: 100%;
+  height: 60%;
+}
+.vizPieAgeGroup{
+  background-color: #38cc98;
+  min-height: 250px;
+}
+.vizPieAgeGroup text{
+  stroke: #000000;
+}
+
+.vizPieOccurencePlace{
+  background-color: #b338cc;
+  min-height: 250px;
+}
+.vizPieOccurencePlace text{
+  stroke: #000000;
+
+
+  font-size: 50px;
+  text-shadow: rgb(224, 224, 224) 1px 1px 0px;
+}
+
+.datavizDateOptions{
+  height: 40px;
+  margin-left: -25%;
+  vertical-align: middle;
+  line-height: 0.5;
+
+}
+
+.datavizDateOptions label{
+  font-size: 30px;
+  color: #000000;
+}
+
+#genderStackedLineChart{
+  width: 100%;
+  height: 100%;
+}

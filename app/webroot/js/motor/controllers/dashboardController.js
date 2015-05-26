@@ -4,53 +4,232 @@
 
 appSuotin.dashboard = {};
 appSuotin.dashboard.controller = function ($scope){
-    debugger;
 
+    $scope.vctms = [];
+    $scope.selectedModel = null;
+    $scope.newModel = null;
+    $scope.saving = false;
+    $scope.showDone = false;
+    $scope.inEditMode = false;
 
-    $scope.startEdit = function(){
-        // copy item from array to temporary edit buffer; but first discard previous edit buffer
-        // store selected item id for future
+    $scope.init = function(){
+        $scope.getUserContributions(null).then(function(pckt){
+
+                if(!angular.isUndefined(pckt) && angular.isArray(pckt.data)) {
+                    var victims = pckt.data;
+                    var dataLength = victims.length;
+
+                    $scope.vctms  = [];
+
+                    for(var i = 0; i < dataLength; i++) {
+
+                        $scope.vctms .push(victims[i]);
+                    }
+                }
+                else
+                {
+                    $scope.showErrorMessage();
+                }
+                data = null;
+                suotin.loaderVM.closeLoaderMessage();
+
+            },function(msg){
+                suotin.loaderVM.closeLoaderMessage();
+                // $scope.saving = false;
+                $scope.showErrorMessage();
+            }
+        );
     };
 
-    $scope.markerClicked = function(item){
-
-        //if current view is smaller than tablet loadcontent to the dash detail
-
-        // set current item to the clicked item
-
-        $.afui.loadContent("#mpSelect",false,0,"up");
-        $.afui.setBackButtonVisibility(false);
+    $scope.selectVictim = function(idx, vctm){
+        $scope.selectedModel = vctm;
     };
 
-    $scope.listItemClicked = function(item){
+    $scope.switchView = function(idx, vctm){
 
-        //if current view is smaller than tablet loadcontent to the dash detail
+        $scope.selectedModel = vctm;
+        $scope.selectedModelIdx = idx;
 
-        // set current item to the clicked item
+        $scope.newModel = JSON.parse(JSON.stringify(vctm));
 
-        $.afui.loadContent("#mpSelect",false,0,"up");
-        $.afui.setBackButtonVisibility(false);
+        var tempDate  = $scope.newModel.occurrencedate.trim();
+        tempDate = tempDate.replace(" ", "T");
+        tempDate = new Date(tempDate);
+        $scope.newModel.occurrencedate = tempDate; //Date.parse(tempDate);
+
+        $scope.inEditMode = true;
+        $.afui.loadContent("#dshDetail",false,0,"up");
+        $.afui.setBackButtonVisibility(true);
+
+        $("a.backButton.back").on('click', function(){
+           // $scope.inEditMode =  false;
+            $("a.backButton.back").off();
+            $scope.cancelEdit();
+            //$.afui.goBack();
+        });
     };
 
-    $scope.selectMapCancel = function(){
-
-        //reload data from the edit buffer with the actual data from the array
-        $.afui.loadContent("#fmSumission",false,0,"up");
-        $.afui.setBackButtonVisibility(false);
+    $scope.cancelEdit = function(){
+        $scope.newModel = null;
+        $scope.selectedModelIdx = null;
+        $scope.inEditMode = false;
+        $("#dtOccurence").blur();
+        $.afui.goBack();
     };
 
-    $scope.selectMapSave = function(){
-        $.afui.loadContent("#fmSumission",false,0,"up");
-        $.afui.setBackButtonVisibility(false);
+
+    $scope.saveEdit = function(frmToSave){
+        $("#dtOccurence").blur();
+
+        if(frmToSave.$valid == false || $scope.saving == true) {
+            return;
+        }
+        suotin.loaderVM.showLoaderMessage("updating victim information!");
+
+        $scope.updateVictim($scope.newModel).then(function(pckt){
+            suotin.loaderVM.closeLoaderMessage();
+            $scope.saving = false;
+
+            // set current seleted model based on idx
+            $scope.vctms[$scope.selectedModelIdx] = pckt.data;
+
+            $scope.inEditMode = false;
+
+
+            $scope.messageContent = "The information have been saved!\n" +
+            " thanks for providing this important message to the world." ;
+
+            $scope.messageBoxEnterMessage = "back to list";
+
+            $scope.messageBoxCancelMessage = "cancel";
+
+            $scope.dataSaved = true;
+            // perhaps, update old data with newly saved data ???? ***************************
+
+            $.afui.loadContent("#vwMessage",false,0,"up");
+            $.afui.setBackButtonVisibility(false);
+
+            suotin.loaderVM.closeLoaderMessage();
+
+        },function(msg){
+            suotin.loaderVM.closeLoaderMessage();
+            $scope.saving = false;
+            $scope.inEditMode = false;
+
+            $scope.messageContent = "Sorry, we weren't able to save the provided information.  please, either try again now or later. \n" +
+            "such report is crucial to us all."
+
+            $scope.messageBoxEnterMessage = "Try again!";
+
+            $scope.messageBoxCancelMessage = "cancel";
+
+            $scope.dataSaved = false;
+
+            $.afui.loadContent("#vwMessage",false,0,"up");
+            $.afui.setBackButtonVisibility(false);
+
+        });
+        $scope.saving = true;
+    };
+
+    $scope.seeMap = function(enableClickHandler){
+
+        var childShdw = null;
+
+        if(angular.isDefined(this.$$childHead.enableMapClickHandler))
+        {
+            childShdw = this.$$childHead;
+        }
+        else if(angular.isDefined(this.$$childTail.enableMapClickHandler))
+        {
+            childShdw = this.$$childTail;
+        }
+        else if(angular.isDefined(appSuotin.leafletMapController) && angular.isDefined(appSuotin.leafletMapController.enableMapClickHandler))
+        {
+            childShdw = appSuotin.leafletMapController;
+        }
+
+        if(childShdw == null)
+            return;
+
+        $.afui.loadContent("#dshMap",false,0,"left");
+        $.afui.setBackButtonVisibility(true);
+        $("a.backButton.back").on('click.map', function(){
+            $("a.backButton.back").off("click.map");
+            appSuotin.leafletMapController.map.off('click');
+            $scope.showDone = false;
+            $.afui.goBack();
+        });
+
+
+       // $scope.map.on('click', $scope.procesMapClickEvt)
+        if(angular.isDefined(enableClickHandler) && enableClickHandler === true)
+            childShdw.enableMapClickHandler();
+
+        childShdw.clearClickHandlerMarker();
+
+        //show marker here
+        var lat = $scope.selectedModel.lat;
+        var lng = $scope.selectedModel.lng;
+        childShdw.setSingleMarker(lat, lng);
+
+        childShdw.map.panTo([lat, lng]);
+
+        childShdw.map.invalidateSize(false);
+/*
+        if($scope.mapAlreadyClicked == true) {
+            $scope.showDone = true;
+
+            //this.$$childHead.setSingleMarker(lat ,lng); use lat long of current Model
+
+        }*/
+
+       /* if($scope.newModel.lat != null && $scope.newModel.lat != undefined){
+            childShdw.setSingleMarker($scope.newModel.lat, $scope.newModel.lng);
+        }*/
+    };
+
+    $scope.messageDone = function(bcontinue){
+        if(bcontinue == true){
+            $scope.newModel = {};
+            $scope.inEditMode = false;
+            $("a.backButton.back").off();
+            $.afui.loadContent("#dshDetail",false,true,"slide");
+            $.afui.setBackButtonVisibility(false);
+        }
+        else{
+
+            suotin.browseBack();
+        }
+
+    };
+
+    $scope.clickHandler = function(lat, lng){
+
+        if(!$scope.inEditMode)
+            return;
+
+        $scope.newModel.lat = lat == undefined ? $scope.$$childHead.tempArg.lat : lat;
+        $scope.newModel.lng = lng == undefined ? $scope.$$childHead.tempArg.lng : lng;
+
+        $scope.$apply(function(){
+            $scope.newModel.location = [$scope.newModel.lat, $scope.newModel.lng];
+            $scope.showDone = true;
+        });
+
+        $scope.mapAlreadyClicked = true;
     };
 
     $scope.$on(
         "$destroy",
         function handleDestroyEvent() {
-            debugger;
+            $scope.vctms = [];
+            $scope.vctms = null;
 
         }
     );
+
+    $scope.init();
 
 }
 
@@ -66,16 +245,17 @@ jQuery(function($){
         var vw = angular.element("#dshbrdView");
 
         appSuotin.lazyLoader.rootScope.$apply(function() {
-             debugger;
+
              vw.attr('ng-controller', "appSuotin.dashboard.controller");
 
              if(!angular.isDefined(appSuotin.dashboard))
                 appSuotin.dashboard = {};
 
-             appSuotin.dashboard.scope = appSuotin.lazyLoader.rootScope.$new();
-             appSuotin.dashboard.compiled = appSuotin.lazyLoader.compile(vw[0]);
+            appSuotin.dashboard.scope = vw.scope();
 
-             appSuotin.dashboard.compiled(appSuotin.dashboard.scope);
+            appSuotin.dashboard.scope.initied = true;
+
+            $.extend( appSuotin.dashboard.scope, appSuotin.dashboard.controller(appSuotin.dashboard.scope) );
 
              vw = angular.element("#dshbrdView");
 
@@ -87,15 +267,12 @@ jQuery(function($){
 
                      var vw = angular.element("#dshbrdView");
                      appSuotin.dashboard.scope.$destroy();
-                     //vw.remove();
-
 
 
                      appSuotin.dashboard.scope = null;
                      appSuotin.dashboard.compiled = null;
                      appSuotin.dashboard = null;
 
-                     //appSuotin.lazyLoader.controllers('addCaseController', null);
 
                      removejscssfile("dashboardController.js", "js");
                      var tmp = JSON.parse(sessionStorage.controllerScripts);
@@ -118,7 +295,7 @@ jQuery(function($){
     appSuotin.modulePromise.resolve(true);
 
     suotin.initAppFrmwrk("#dshMaster");
-    $.afui.setBackButtonVisibility(false);
+    $.afui.setBackButtonVisibility(true);
 
     suotin.frame.reload();
 

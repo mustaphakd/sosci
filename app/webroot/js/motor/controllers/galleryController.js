@@ -200,8 +200,9 @@ appSuotin.gallery.controller = function ($scope){
                        ' </span>' +
                     '</div>' +*/
                     '<span class="inline-icons">' +
-                        '<a  class="" title="">' +
-                            '<i class="fa fa-angle-double-up fa-3x" ></i>' +
+                        '<a  class="" title="" style="font-style: italic">' +
+                           // '<i class="fa fa-angle-double-up fa-3x" ></i>' +
+                            vctm.occurrencedate +
 
                         '</a>' +
                     '</span>' +

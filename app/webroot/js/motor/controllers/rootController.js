@@ -94,7 +94,7 @@ appControllers.controller('mainAppController',['$scope','$route', '$location','$
         //debugger;
         $scope.$root.$on('$routeChangeStart', function(scope, next, current){
             //console.log('Changing from '+angular.toJson(current)+' to '+angular.toJson(next));
-
+            suotin.loaderVM.showLoaderMessage("loading data...");
             $scope.clearAllListeners();
             if (typeof(current) !== 'undefined'){
                 $templateCache.remove(current.templateUrl);
@@ -164,12 +164,17 @@ appControllers.controller('mainAppController',['$scope','$route', '$location','$
         /************************Services and behaviors*******************************************/
 
         $scope.getVictims = function(page){
-            //debugger;
+
             return $scope.services.getVictims(page);
         };
 
+        $scope.getUserContributions = function(page){
+
+            return $scope.services.getUserContributions(page);
+        };
+
         $scope.getGallery = function(page){
-            //debugger;
+
             return $scope.services.getGallery(page);
         };
 
@@ -178,9 +183,49 @@ appControllers.controller('mainAppController',['$scope','$route', '$location','$
         };
 
         $scope.getVictimDetail = function(victimId){
-            //debugger;
+
             return $scope.services.getVictimDetail(victimId);
         };
+
+        $scope.getDatavizDates = function(){
+
+            return $scope.services.getDatavizDates();
+        };
+
+        $scope.getVictimsByDate = function(_date){
+
+            return $scope.services.getVictimsByDate(_date);
+        };
+
+        $scope.rootInit = function(){
+            if(suotin.security.isLoggedIn())
+            {
+                    // not declared in main.js suotin used here for convenience
+                suotin.security.intervalPolling = window.setInterval(function(){
+                    $scope.services.userLoggedIn().then(
+                        function(pckt){
+
+                            if(!angular.isUndefined(pckt) && angular.isDefined(pckt.data)) {
+
+                                if(!pckt.data){
+                                    window.clearInterval(suotin.security.intervalPolling);
+                                    suotin.security.signOff();
+                                }
+                            }
+                        },function(msg){
+
+                        }
+                    );
+
+                }, (1000 * 15)); // every 15 secs
+            }
+        };
+
+        $scope.updateVictim = function(victim){
+            return $scope.services.updateVictim(victim);
+        };
+
+        $scope.rootInit();
 
 
     } ]);

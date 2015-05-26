@@ -1,0 +1,91 @@
+<div style="background-color: #cc9b38; width: 100%; height: 100%" id="dataVisContainer">
+    <div class="view" id="dataVizView">
+        <header>
+            Data Visualization
+
+            <style>
+
+                div[date-picker-wrapper] {
+                    color: black;
+
+                }
+            </style>
+
+        </header>
+        <div class="pages">
+            <div class="panel" selected="true"  id="datavizMainPanel" >
+                <div class="formGroupHead">
+                    <div class="leaflet-control-viewContainer " ng-init="panelShowned = false" style="margin-left: 2%; margin-bottom: 3px;">
+                        <button class="leaflet-control-iconBtn" style="font-size: 26px; width: 150px">{{filterDate.date}}</i></button>
+                        <button class="leaflet-control-iconBtn leaflet-control-dropdown" style="height: 51px;" ng-click="panelShowned = !panelShowned ;"><span class="fa fa-filter fa-2x"></span><span class="sr-only"></span></button>
+                        <div class="dropdown-menu " style="left:0px;display: inline;" ng-show="panelShowned">
+                           <div class="datavizDateOptions"  ng-repeat="dte in dates">
+                               <!--<input ng-if="dte == filterDate" name="groupradio" tabindex="$index + 1" id="rddefault_{{$index}}" type="radio" checked="checked" value="{{dte}}" ng-click="selectYear()" ng-model="filterDate.date"><label ng-if="dte == filterDate" for="rddefault_{{$index}}"> {{dte}}</label>
+                               <input ng-if="dte != filterDate" name="groupradio" tabindex="$index + 1" id="rddefault_{{$index}}" type="radio"  value="{{dte}}" ng-click="selectYear()" ng-model="filterDate.date"><label ng-if="dte != filterDate" for="rddefault_{{$index}}"> {{dte}}</label>-->
+                               <input  name="groupradio" tabindex="$index + 1" id="rddefault_{{$index}}" type="radio" value="{{dte}}"  ng-value="{{dte}}" ng-change="selectYear()" ng-model="filterDate.date"><label for="rddefault_{{$index}}"> {{dte}}</label>
+                           </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                    <div class="grid vizAreayearly" ng-click="mapClikked">
+                        <div class="" id="genderStackedLineChart">
+
+                            <a class='reset' ng-click="resetTopLineChart()" >reset</a>
+
+
+                        </div>
+
+                    </div>
+                <!--
+                                    <div class="grid" style="overflow: visible!important;">
+                                        <div class=1-3">date d'occurence</div> <!--class="jq-ui-forms"
+
+                                        <div class="col2-3">
+
+                                        </div>
+                                    </div>-->
+
+
+
+
+                    <div class="grid bottomSpacer">
+                        <div class="col2 vizPieAgeGroup" id="vizPieAgeGroup" >
+
+                            <a class='reset' ng-click="resetAgePieChart()" >reset</a>
+                        </div>
+                        <div class="col2 vizPieOccurencePlace" id="vizPieOccurencePlace" >
+                            <a class='reset' ng-click="resetPlaceChart()" >reset</a>
+
+                        </div>
+                    </div>
+
+            </div>
+
+            <div class="panel" id="vwMessage" >
+
+                <div class="messageBox bottomSpacer">
+                    <div class="messageContent">
+
+                        <span ng-if="dataSaved == true" class=" fa fa-check-square-o fa-5x" style="color: greenyellow"></span>
+                        <span ng-if="dataSaved == false" class=" fa fa-exclamation-triangle fa-5x" style="color: red"></span>
+
+                        <p>
+                            {{messageContent}}
+                        </p>
+
+                    </div>
+                    <div class="grid">
+                        <div class="col2 btnGreen" ng-click="messageDone(true)"><a class=" fa  fa-5x">{{messageBoxEnterMessage}}</a></div>
+                        <div class="col2 btnOrand" ng-click="messageDone(false)"><a class=" fa  fa-5x">{{messageBoxCancelMessage}}</a></div>
+                    </div>
+                </div>
+
+            </div>
+
+
+        </div>
+    </div>
+
+</div>

@@ -1,78 +1,77 @@
 <div id="dshbrdView" style="min-height: 100%; width: 100%; background-color: brown;">
     <div class="view" id="addCaseMainView">
         <header>
-            <span style="display: block">#Registered users</span>
-            <span style="display: block">Users online</span>
+            <span style="">#Listing...</span>
+            <!--<span style="display: inline"> Users online</span>-->
+
+            <span class="navBack" ng-show="showDone" ng-click="doneSectingLocation()"><span class="btnBlue">Done</span></span>
+            <style>
+
+                div[date-picker-wrapper] {
+                    color: black;
+
+                }
+            </style>
         </header>
         <div class="pages">
-            <div class="panel" selected="true" title="Form" id="dshMaster" >
+            <div class="panel" selected="true" title="List" id="dshMaster" >
                 <div class="grid">
-                    <div class="col2-3">map mamp map</div>
+                    <div class="col2-3">
+                        <ul class="list">
+                            <li ng-repeat="vctm in vctms" style="cursor: pointer;">
+                                <a ng-dblclick="switchView($index, vctm)" >
+                                    <div class="grid" ng-click="selectVictim($index, vctm)">
+                                        <div class="col2-3">{{vctm.name}}</div>
 
-                    <div class="col1-3 hideSmallerThanTablet">
-                        <div class="formGroupHead">Formulaire</div>
-                        <form>
+                                        <div class="col1-3" style="font-style: italic">{{vctm.occurrencedate}}</div>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="col1-3 hideSmallerThanTablet" ng-show="selectedModel != null">
+                        <div class="formGroupHead">Details</div>
+
                             <div class="grid">
                                 <div class="col1-3">name</div>
 
-                                <div class="col2-3"><input type="text" placeholder="name" id="txtName"></div>
+                                <div class="col2-3">{{selectedModel.name}}</div>
                             </div>
 
                             <div class="grid">
                                 <div class="col1-3">crime type</div>
 
                                 <div class="col2-3">
-                                    <select >
-                                        <option value="1">Kidnaping</option>
-                                        <option value="2">Murder</option>
-                                    </select>
+                                    {{selectedModel.crimeTypeDisplay}}
                                 </div>
                             </div>
 
                             <div class="grid">
                                 <div class="col1-3">picture of the victim</div>
 
-                                <div class="col2-3"><input type="text" placeholder="image path" ></div>
-
-                                <div class="col2-3"><input type="button" placeholder="select source" ></div>
+                                <img ng-src="{{selectedModel.url}}" height="225">
                             </div>
 
                             <div class="grid">
                                 <div class="col1-3">age group</div>
 
                                 <div class="col2-3">
-                                    <select >
-                                        <option value="1">Enfant</option>
-                                        <option value="2">Teen(12-18 ans)</option>
-                                        <option value="4">Jeune Adult(19 - 25 ans)</option>
-                                        <option value="8">Adult(26 - 45 ans)</option>
-                                        <option value="16">Middle aged(46 - 69 ans)</option>
-                                        <option value="32">Old(70+)</option>
-                                    </select>
+                                    {{selectedModel.ageGroupDisplay}}
                                 </div>
                             </div>
 
                             <div class="grid">
                                 <div class="col1-3">Gender</div>
 
-                                <div class="col2-3 bottomSpacer">
-                                    <input  type="radio" name="radio_test" id="radio_1"  value="1"><label for="radio_1">Male</label>
-                                    <input  type="radio" name="radio_test" id="radio_2" value="2"><label for="radio_2">Female</label>
-                                </div>
+                                {{selectedModel.genderDisplay}}
                             </div>
 
                             <div class="grid">
                                 <div class="col1-3">Place d'occurence</div>
 
                                 <div class="col2-3">
-                                    <select>
-                                        <option value="1">Club</option>
-                                        <option value="2">Ecole</option>
-                                        <option value="4">Marche</option>
-                                        <option value="8">Rue</option>
-                                        <option value="16">Taxi</option>
-                                        <option value="32">other</option>
-                                    </select>
+                                    {{selectedModel.placeDisplay}}
                                 </div>
                             </div>
 
@@ -80,36 +79,25 @@
                                 <div class="col1-3">detail</div>
 
                                 <div class="col2-3">
-                                    <textarea rows="6" placeholder="Enter detail"></textarea>
+                                    <textarea rows="6" placeholder="Enter detail">{{selectedModel.detail}}</textarea>
                                 </div>
                             </div>
 
                             <div class="grid">
                                 <div class="col1-3">Location</div>
 
-                                <div class="col2-3"><a class="button fa fa-location-arrow" ng-click="selectMap();">Select map</a></div>
+                                <div class="col2-3"><a class="button fa fa-location-arrow" ng-click="seeMap();">View map</a></div>
                             </div>
 
                             <div class="grid">
                                 <div class="col1-3">Status</div>
 
                                 <div class="col2-3">
-                                    <select >
-                                        <option value="1">Open</option>
-                                        <option value="2">Pending</option>
-                                        <option value="4">Unresolved</option>
-                                        <option value="8">Unknown</option>
-                                    </select>
+                                    {{selectedModel.statusDisplay}}
                                 </div>
                             </div>
 
 
-
-                            <!--<div class="grid"> -->
-                                <div class=" btnGreen" style="width: 100%"><a class=" fa fa-floppy-o fa-5x">Save</a></div>
-                                <div class=" btnOrand" style="width: 100%"><a class=" fa fa-eraser fa-5x">Cancel</a></div>
-                            <!--</div>-->
-                        </form>
                     </div>
                 </div>
 
@@ -117,20 +105,30 @@
 
             </div>
 
-            <div class="panel" title="Map" id="dshDetail" style="height: 100%; width: 100%; background-color: #bbbbbb">
+            <div class="panel" title="Detail & Edit" id="dshDetail" style="height: 100%; width: 100%; background-color: #bbbbbb">
                 <div class="formGroupHead">Formulaire</div>
-                <form>
+                <form name="frmAddCase">
                     <div class="grid">
                         <div class="col1-3">name</div>
 
-                        <div class="col2-3"><input type="text" placeholder="name" ></div>
+                        <div class="col2-3"><input ng-model="newModel.name" type="text" placeholder="name" id="txtName" name="txtName" required="true" minlength="3"></div>
+                    </div>
+
+                    <div class="grid" style="overflow: visible!important;">
+                        <div class="col1-3">date d'occurence</div> <!--class="jq-ui-forms" -->
+
+                        <div class="col2-3">
+                            <input type="text" date-time   placeholder="when did it happened" required="true" view="hours" ng-model="newModel.occurrencedate" name="dtOccurence" id="dtOccurence">
+
+                        </div>
                     </div>
 
                     <div class="grid">
                         <div class="col1-3">crime type</div>
 
                         <div class="col2-3">
-                            <select >
+
+                            <select  ng-model="newModel.crimeType" required name="lstCrimeType">
                                 <option value="1">Kidnaping</option>
                                 <option value="2">Murder</option>
                             </select>
@@ -139,17 +137,17 @@
 
                     <div class="grid">
                         <div class="col1-3">picture of the victim</div>
+                        <img ng-src="{{newModel.url}}" height="225">
+                        <div class="col1-3"><input ng-model="newModel.url" type="text" placeholder="image path" id="txtPic" name="txtPic" required pattern="^https?:\/\/[^\s]+/?$" /></div>
 
-                        <div class="col2-3"><input type="text" placeholder="image path" ></div>
-
-                        <div class="col2-3"><input type="button" placeholder="select source" ></div>
                     </div>
 
                     <div class="grid">
                         <div class="col1-3">age group</div>
 
                         <div class="col2-3">
-                            <select >
+
+                            <select name="ageGroup" required ng-model="newModel.ageGroup">
                                 <option value="1">Enfant</option>
                                 <option value="2">Teen(12-18 ans)</option>
                                 <option value="4">Jeune Adult(19 - 25 ans)</option>
@@ -164,8 +162,12 @@
                         <div class="col1-3">Gender</div>
 
                         <div class="col2-3 bottomSpacer">
-                            <input id="radio_11" type="radio" name="radio_test2" value="1"><label for="radio_11">Male</label>
-                            <input id="radio_22" type="radio" name="radio_test2" value="2"><label for="radio_22">Female</label>
+                            <input  id="radio_1" type="radio" required name="rdoGender" value="1" ng-model="newModel.gender">
+                            <label ng-if="frmAddCase.rdoGender.$invalid" for="radio_1" class="makeInvalid" >Male</label>
+                            <label ng-if="frmAddCase.rdoGender.$valid" for="radio_1"  >Male</label>
+                            <input  id="radio_2" type="radio" required name="rdoGender" value="2" ng-model="newModel.gender">
+                            <label ng-if="frmAddCase.rdoGender.$invalid" class="makeInvalid"  for="radio_2" >Female</label>
+                            <label ng-if="frmAddCase.rdoGender.$valid"   for="radio_2" >Female</label>
                         </div>
                     </div>
 
@@ -173,13 +175,15 @@
                         <div class="col1-3">Place d'occurence</div>
 
                         <div class="col2-3">
-                            <select id="slctPlace">
+
+                            <select name="inptPlace" required ng-model="newModel.place">
                                 <option value="1">Club</option>
                                 <option value="2">Ecole</option>
                                 <option value="4">Marche</option>
                                 <option value="8">Rue</option>
                                 <option value="16">Taxi</option>
-                                <option value="32">other</option>
+                                <option value="32">Maison</option>
+                                <option value="64">other</option>
                             </select>
                         </div>
                     </div>
@@ -188,24 +192,30 @@
                         <div class="col1-3">detail</div>
 
                         <div class="col2-3">
-                            <textarea rows="6" placeholder="Enter detail"></textarea>
+                            <textarea rows="6" placeholder="Enter detail" required ng-model="newModel.detail"></textarea>
                         </div>
                     </div>
 
                     <div class="grid">
                         <div class="col1-3">Location</div>
 
-                        <div class="col2-3"><a class="button fa fa-location-arrow" ng-click="selectMap();">Select map</a></div>
+
+                        <div class="col2-3">
+                            <input type="text" disabled required ng-model="newModel.location" id="txtlocation" name="txtlocation" placeholder="select map below"/>
+                            <a class="button fa fa-location-arrow" ng-click="seeMap(true);">Select map</a>
+                        </div>
                     </div>
 
                     <div class="grid">
                         <div class="col1-3">Status</div>
 
                         <div class="col2-3">
-                            <select >
+
+                            <select id="inptStat" ng-model="newModel.status" required>
                                 <option value="1">Open</option>
                                 <option value="2">Pending</option>
                                 <option value="4">Unresolved</option>
+                                <option value="16">Closed</option>
                                 <option value="8">Unknown</option>
                             </select>
                         </div>
@@ -213,11 +223,49 @@
 
 
 
-                    <div class="grid">
-                        <div class="col2 btnGreen"><a class=" fa fa-floppy-o fa-5x">Save</a></div>
-                        <div class="col2 btnOrand"><a class=" fa fa-eraser fa-5x">Cancel</a></div>
+                    <div class="grid bottomSpacer">
+                        <div class="col2 btnGreen" ng-click="saveEdit(frmAddCase)"><a class=" fa fa-floppy-o fa-5x">Save</a></div>
+                        <div class="col2 btnOrand" ng-click="cancelEdit()"><a class=" fa fa-eraser fa-5x">Cancel</a></div>
                     </div>
                 </form>
+            </div>
+
+            <div class="panel" title="Map" id="dshMap" style="height: 100%; width: 100%;">
+
+
+                    <div id="idaddMap" style="height: 100%; width: 100%">
+                    <leaflet-map show-view-control=false
+                                 show-list-control=false
+                                 show-victim-list=false
+                                 container-selector="#idaddMap"
+                                 marker-click-hndlr="clickHandler"
+
+                            ></leaflet-map>
+                </div>
+
+
+            </div>
+
+
+            <div class="panel" id="vwMessage" >
+
+                <div class="messageBox bottomSpacer">
+                    <div class="messageContent">
+
+                        <span ng-if="dataSaved == true" class=" fa fa-check-square-o fa-5x" style="color: greenyellow"></span>
+                        <span ng-if="dataSaved == false" class=" fa fa-exclamation-triangle fa-5x" style="color: red"></span>
+
+                        <p>
+                            {{messageContent}}
+                        </p>
+
+                    </div>
+                    <div class="grid">
+                        <div class="col2 btnGreen" ng-click="messageDone(true)"><a class=" fa  fa-5x">{{messageBoxEnterMessage}}</a></div>
+                        <div class="col2 btnOrand" ng-click="messageDone(false)"><a class=" fa  fa-5x">{{messageBoxCancelMessage}}</a></div>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
