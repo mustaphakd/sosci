@@ -505,7 +505,8 @@ jQuery(function($){
     $.os.ie = false;
 
     appSuotin.stats.init = function(){
-        var controllerName = 'js/motor/controllers/statsController.js';
+        //var controllerName = 'js/motor/controllers/statsController.js';
+        var controllerName = 'js/motor/controllers/statsController.min.js';
         var tmp = JSON.parse(sessionStorage.controllerScripts);
         tmp.scripts.push(controllerName);
         sessionStorage.controllerScripts = JSON.stringify(tmp);
@@ -530,7 +531,8 @@ jQuery(function($){
 
             vw.on("$destroy",function handleDestroyEvent() {
                     //debugger;
-                    var controllerfilePathName = 'js/motor/controllers/statsController.js';
+                    //var controllerfilePathName = 'js/motor/controllers/statsController.js';
+                    var controllerfilePathName = 'js/motor/controllers/statsController.min.js';
 
 
                     $.os.ie = appSuotin.stats.os;
@@ -543,7 +545,8 @@ jQuery(function($){
                     appSuotin.stats.compiled = null;
                     appSuotin.stats = null;
 
-                    removejscssfile("statsController.js", "js");
+                    //removejscssfile("statsController.js", "js");
+                    removejscssfile("statsController.min.js", "js");
                     removejscssfile("dc.min.js", "js");
                     removejscssfile("crossfilter.min.js", "js");
                     removejscssfile("d3.v3.min.js", "js");

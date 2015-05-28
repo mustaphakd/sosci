@@ -222,7 +222,8 @@ jQuery(function($){
 
 
     appSuotin.addcase.init = function(){
-        var controllerName = 'js/motor/controllers/addCaseController.js';
+        //var controllerName = 'js/motor/controllers/addCaseController.js';
+        var controllerName = 'js/motor/controllers/addCaseController.min.js';
          var tmp = JSON.parse(sessionStorage.controllerScripts);
          tmp.scripts.push(controllerName);
          sessionStorage.controllerScripts = JSON.stringify(tmp);
@@ -257,7 +258,8 @@ jQuery(function($){
 
                      suotin.cleanAppFrmwrk();
 
-                     var controllerfilePathName = 'js/motor/controllers/addCaseController.js';
+                     //var controllerfilePathName = 'js/motor/controllers/addCaseController.js';
+                     var controllerfilePathName = 'js/motor/controllers/addCaseController.min.js';
 
                      var vw = angular.element("#addCaseView");
 
@@ -271,7 +273,8 @@ jQuery(function($){
                      addcase_controller = null;
 
 
-                     removejscssfile("addCaseController.js", "js");
+                     //removejscssfile("addCaseController.js", "js");
+                     removejscssfile("addCaseController.min.js", "js");
                      var tmp = JSON.parse(sessionStorage.controllerScripts);
                      var idx =  0;
                      if( (idx = tmp.scripts.indexOf(controllerfilePathName)) != -1)

@@ -194,7 +194,7 @@ appSuotin.dashboard.controller = function ($scope){
             $scope.newModel = {};
             $scope.inEditMode = false;
             $("a.backButton.back").off();
-            $.afui.loadContent("#dshDetail",false,true,"slide");
+            $.afui.loadContent("#dshMaster",false,true,"slide");
             $.afui.setBackButtonVisibility(false);
         }
         else{
@@ -220,6 +220,19 @@ appSuotin.dashboard.controller = function ($scope){
         $scope.mapAlreadyClicked = true;
     };
 
+    $scope.showErrorMessage = function(){
+        $scope.messageContent = "An error occured while retrieving data over the network. \n";
+
+        $scope.messageBoxEnterMessage = "Try again!";
+
+        $scope.messageBoxCancelMessage = "cancel";
+
+        //$scope.dataSaved = false;
+
+        $.afui.loadContent("#vwMessage",false,0,"up");
+        $.afui.setBackButtonVisibility(false);
+    };
+
     $scope.$on(
         "$destroy",
         function handleDestroyEvent() {
@@ -236,7 +249,8 @@ appSuotin.dashboard.controller = function ($scope){
 jQuery(function($){
 
     appSuotin.dashboard.init = function(){
-        var controllerName = 'js/motor/controllers/dashboardController.js';
+        //var controllerName = 'js/motor/controllers/dashboardController.js';
+        var controllerName = 'js/motor/controllers/dashboardController.min.js';
          var tmp = JSON.parse(sessionStorage.controllerScripts);
          tmp.scripts.push(controllerName);
          sessionStorage.controllerScripts = JSON.stringify(tmp);
@@ -263,7 +277,8 @@ jQuery(function($){
 
                      suotin.cleanAppFrmwrk();
 
-                     var controllerfilePathName = 'js/motor/controllers/dashboardController.js';
+                     //var controllerfilePathName = 'js/motor/controllers/dashboardController.js';
+                     var controllerfilePathName = 'js/motor/controllers/dashboardController.min.js';
 
                      var vw = angular.element("#dshbrdView");
                      appSuotin.dashboard.scope.$destroy();
@@ -274,7 +289,8 @@ jQuery(function($){
                      appSuotin.dashboard = null;
 
 
-                     removejscssfile("dashboardController.js", "js");
+                     //removejscssfile("dashboardController.js", "js");
+                     removejscssfile("dashboardController.min.js", "js");
                      var tmp = JSON.parse(sessionStorage.controllerScripts);
                      var idx =  0;
                      if( (idx = tmp.scripts.indexOf(controllerfilePathName)) != -1)

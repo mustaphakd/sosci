@@ -618,7 +618,7 @@ appServices.factory('suotinService', [ "$location", "$q" ,"repositoryService","$
                     req.data.statusDisplay = service._getStatus(req.data.casestatus);
                     req.data.occurrencedate = req.data.occurrencedate;
 
-                    req.data.location = " lat: " + req.data.lat + " lng: " + req.data.lng;
+                    req.data.location = " lat: " + req.data.locationlat + " lng: " + req.data.locationlng;
                     
                     
                     defr.resolve({data:req.data});

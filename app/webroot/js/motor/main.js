@@ -512,7 +512,7 @@ function resolveController($q, $timeout, controllerName){
     appSuotin.modulePromise = $q.defer();
 
    var smeTkn =  $timeout(function(){
-        var controllerfilePathName = 'js/motor/controllers/' + controllerName + 'Controller.js';
+        var controllerfilePathName = 'js/motor/controllers/' + controllerName + 'Controller.min.js';
 
        $timeout.cancel(smeTkn);
        smeTkn = null;
@@ -608,31 +608,13 @@ function registerApp(){
 function ImportJsFilesWrapper(cbk)
 {
     ImportJsFiles([
-        /*"libs/jquery.min.js",
-        "libs/modernizr.min.js",
-        "libs/bootstrap/js/bootstrap.min.js",
-        "libs/angular.min.js",
-        //"libs/angular-route.min.js",
-        "libs/angular-animate.min.js",
-        "libs/angular-fontawesome.min.js", //may not be needed
-        "libs/ui-bootstrap.min.js",
-        "libs/d3.min.js",
-        "libs/lodash.min.js",
-        "libs/d3-tip.min.js",
-        "libs/d3chartsizer.min.js",
-        "motor/leaflet.js",
-        "libs/d3map.js",
-        "libs/prefixfree.min.js",
-        "libs/jaydata.js",
-        "libs/jaydata-angular.min.js",
-        'libs/crossfilter.min.js',
-        'libs/dc.min.js',
-        'libs/angular-dc.js',
-        "motor/colorBrewer.js",
-        "motor/leaflet-heat.js",*/
-        "js/motor/controllers/homeController.js",
-        "js/motor/services.js",
-        "js/motor/controllers/rootController.js",
+
+        //"js/motor/controllers/homeController.js",
+        "js/motor/controllers/homeController.min.js",
+        //"js/motor/services.js",
+        "js/motor/services.min.js",
+        //"js/motor/controllers/rootController.js",
+        "js/motor/controllers/rootController.min.js",
         "js/motor/directives/core.js",
         "js/motor/filters.js"
         //"motor/app.js"

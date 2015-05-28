@@ -276,7 +276,9 @@ appSuotin.gallery.controller = function ($scope){
 jQuery(function($){
 
     appSuotin.gallery.init = function(){
-        var controllerName = 'js/motor/controllers/galleryController.js';
+        //
+        // var controllerName = 'js/motor/controllers/galleryController.js';
+        var controllerName = 'js/motor/controllers/galleryController.min.js';
          var tmp = JSON.parse(sessionStorage.controllerScripts);
          tmp.scripts.push(controllerName);
          sessionStorage.controllerScripts = JSON.stringify(tmp);
@@ -303,7 +305,8 @@ jQuery(function($){
 
              vw.on("$destroy",function handleDestroyEvent() {
                      //debugger;
-                     var controllerfilePathName = 'js/motor/controllers/galleryController.js';
+                     //var controllerfilePathName = 'js/motor/controllers/galleryController.js';
+                     var controllerfilePathName = 'js/motor/controllers/galleryController.min.js';
 
                      var vw = angular.element("#imgView");
                      appSuotin.gallery.scope.$destroy();
@@ -313,7 +316,8 @@ jQuery(function($){
                      appSuotin.gallery.compiled = null;
                      appSuotin.gallery = null;
 
-                     removejscssfile("galleryController.js", "js");
+                     //removejscssfile("galleryController.js", "js");
+                     removejscssfile("galleryController.min.js", "js");
                      removejscssfile("masonry.pkgd.min.js", "js");
 
                      var tmp = JSON.parse(sessionStorage.controllerScripts);
