@@ -72,6 +72,7 @@ var suotin = {
         //TODO: if log in cookie is present, then user is logged in
 
         suotin.initialDefaultLocation = "/demos/sosci" // getPathName();
+        //suotin.initialDefaultLocation = "/sosci" ;
 
         if(verge){
             if(verge.viewportW() > 767){ //tablet && desktop

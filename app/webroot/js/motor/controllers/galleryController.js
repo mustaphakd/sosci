@@ -11,6 +11,7 @@ appSuotin.gallery.controller = function ($scope){
     $scope.totalPage = 0;
     $scope.msnry = null;
     $scope.msnryContainer = null;
+    $scope.intervalTkn = null;
 
     $scope.initPics = function(){
         suotin.loaderVM.showLoaderMessage("loading data...");
@@ -248,6 +249,35 @@ appSuotin.gallery.controller = function ($scope){
             '</div>';
     };
 
+    $scope.scroolend = function(){
+
+        if($scope.intervalTkn != null || angular.isDefined($scope.intervalTkn))
+        {
+            appSuotin.lazyLoader.interval.cancel($scope.intervalTkn);
+            $scope.intervalTkn = null;
+        }
+    };
+
+    $scope.scrooldwn = function(){
+        $scope.scroolend();
+        vw = $("#imgView");
+        var pos = vw.scrollTop();
+        vw.scrollTop(++pos);
+        $scope.intervalTkn = appSuotin.lazyLoader.interval(function() {
+            vw.scrollTop(++pos);
+        }, 30);
+    };
+
+    $scope.scroolup= function(){
+       $scope.scroolend();
+        vw = $("#imgView");
+        var pos = vw.scrollTop();
+        vw.scrollTop(--pos);
+        $scope.intervalTkn = appSuotin.lazyLoader.interval(function() {
+            vw.scrollTop(--pos);
+        }, 20);
+    };
+
 
     $scope.$on(
         "$destroy",
@@ -266,6 +296,9 @@ appSuotin.gallery.controller = function ($scope){
                     $scope.msnry = null;
                 }
             }
+
+            appSuotin.lazyLoader.interval.cancel($scope.intervalTkn);
+            $scope.intervalTkn = null;
         }
     );
 

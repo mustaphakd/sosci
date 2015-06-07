@@ -62,7 +62,7 @@ appDirectives.directive('leafletMap',["$compile", function leafletMap ($compile)
                 //$scope.ulWidth =
                 hframe = null;
             };
-            $scope.previous = function(e){
+            $scope.previous = function(e, flickSpeed){
                // e.stopImmediatePropagation();
                 //e.preventDefault();
                 var ulWidth = $scope._ul.width();
@@ -79,12 +79,15 @@ appDirectives.directive('leafletMap',["$compile", function leafletMap ($compile)
                     var steps = pageWidth / itemSize; //number of items per page
                     var mod = maxTrans % itemSize;
 
-                    if(mod != 0)
-                    {
+                    if(mod != 0) {
                         xtranslation += mod;
-                        $scope._ul.css({transform: "translateX(" + xtranslation +"px) translateZ(0)"});
+                        $scope._ul.css({transform: "translateX(" + xtranslation + "px) translateZ(0)"});
                         return false;
                     }
+
+
+                    if(angular.isDefined(flickSpeed) && isFinite(flickSpeed))
+                            itemSize = itemSize * flickSpeed;
 
                     if(maxTrans < itemSize)
                     {
@@ -100,7 +103,12 @@ appDirectives.directive('leafletMap',["$compile", function leafletMap ($compile)
                 }
                 return false;
             };
-            $scope.next = function(e){
+            $scope.swipePrevious = function(e, ee){
+                $scope.previous(null, 3);
+            };
+
+
+            $scope.next = function(e, flickSpeed){
                 //e.stopImmediatePropagation();
                 //e.preventDefault();
                 var ulWidth = $scope._ul.width();
@@ -135,14 +143,20 @@ appDirectives.directive('leafletMap',["$compile", function leafletMap ($compile)
                         return false;
                     }
 
+                    if(angular.isDefined(flickSpeed) && isFinite(flickSpeed))
+                        itemSize = itemSize * flickSpeed;
+
                     if(maxTrans < itemSize)
                     {
+
                         xtranslation -= (itemSize - maxTrans);
                     }
                     else
                     {
                         xtranslation -= itemSize;
                     }
+
+
 
                     $scope._ul.css({transform: "translateX(" + xtranslation +"px) translateZ(0)"});
                     return false;
@@ -151,6 +165,11 @@ appDirectives.directive('leafletMap',["$compile", function leafletMap ($compile)
                 return false;
 
             };
+            $scope.swipeNext = function(e, ee){
+               // debugger;
+                $scope.next(null,3);
+            };
+
 
             $scope.markerCache = null;
             $scope.markerIconCache = null;
@@ -550,9 +569,13 @@ appDirectives.directive('leafletMap',["$compile", function leafletMap ($compile)
                         '</li>'+
 
                         '</ul>'+
-                            //'<div class="scroller-nav-container">' +
-                        '<div class="left" ng-click="previous()"><i class="fa fa-chevron-left fa-5x"></i></div>' +
-                        ' <div class="right" ng-click="next()"><i class="fa fa-chevron-right fa-5x"></i></div></div>';// +
+                            //'<div class="scroller-nav-container">' +ng-swipe-left="swipeNext()"ng-swipe-right="swipePrevious()"
+                        '<div class="left"  ><i class="fa fa-chevron-left fa-5x" ng-click="previous()"></i>' +
+                                                                            '<span class="swipeRight "  ng-click="swipePrevious()"><i class="fa fa-angle-double-left fa-5x mobileOnly"></i></span>' +
+                        '</div>' +
+                        ' <div class="right" style="position: absolute"  ><i class="fa fa-chevron-right fa-5x" ng-click="next()"></i>' +
+                                                        '<span class="swipeLeft "  ng-click="swipeNext()"><i class="fa fa-angle-double-right fa-5x mobileOnly"></i></span>' +
+                        '</div></div>';// +
                         //'</div>';
 
                         $compile(scroller)(this.options.scope);

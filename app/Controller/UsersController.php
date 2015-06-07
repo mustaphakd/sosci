@@ -84,6 +84,7 @@ class UsersController extends AppController
 
     public function opauth_complete()
     {
+
         $validAnyway = false;
         if(isset($_COOKIE['boucle']) && !empty($_COOKIE['boucle'])){
             $_SESSION['Auth'] = unserialize($_COOKIE['boucle']);
@@ -347,6 +348,7 @@ class UsersController extends AppController
             // make sure to pass down api key
 
            // $session = unserialize($_COOKIE['_opauth_flickr']);
+            $nicekey = Configure::read('Opauth.Strategy.Flickr');
 
             $this->user_info = array(
                 'uploadOnly' => true,
@@ -356,7 +358,7 @@ class UsersController extends AppController
                 'image' => isset($user_info['image'])? $user_info['image']  : "",
                 'token' => $user_info["oauthToken"],
                 'secret' => $user_info['oauthTokenSecret'],
-                'api_key' => Configure::read('Opauth.Strategy.Flickr')['key']
+                'api_key' => $nicekey['key']
             );
 
             $this->set("user_data", $this->user_info);
